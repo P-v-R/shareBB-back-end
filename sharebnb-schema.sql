@@ -4,6 +4,7 @@ CREATE TABLE users (
   last_name TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE
     CHECK (position('@' IN email) > 1),
+  bio TEXT,
   password TEXT NOT NULL,
   is_admin BOOLEAN NOT NULL DEFAULT FALSE
 );

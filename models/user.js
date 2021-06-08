@@ -93,19 +93,20 @@ class User {
   }
 
   /** Find all users.
-   *
-   * Returns [{ username, first_name, last_name, email, is_admin }, ...]
+   * 
+   * Returns [{ first_name, last_name, email, bio, is_admin }, ...]
    **/
 
   static async findAll() {
     const result = await db.query(
-      `SELECT username,
+      `SELECT id,
                   first_name AS "firstName",
                   last_name AS "lastName",
                   email,
+                  bio,
                   is_admin AS "isAdmin"
            FROM users
-           ORDER BY username`,
+           ORDER BY id`,
     );
 
     return result.rows;
@@ -113,7 +114,7 @@ class User {
 
   /** Given a id, return data about user.
    *
-   * Returns { id, first_name, last_name, email, is_admin, listings, bookings, messages }
+   * Returns { id, first_name, last_name, email, bio, is_admin, listings, bookings, messages }
    *   where listings is { id, address, unit, city, state, zip, country, owner_id, title, description, photo_url, price_per_hour, min_hours }
    *  where bookings is { id, listing_id, renter_id, start_date, num_hours, total_price, booked_at }
    *    where messages is { listing_id, from_user_id, to_user_id, message, time}
@@ -127,6 +128,7 @@ class User {
                   first_name AS "firstName",
                   last_name AS "lastName",
                   email,
+                  bio,
                   is_admin AS "isAdmin"
            FROM users
            WHERE id = $1`,
@@ -166,7 +168,7 @@ class User {
 
     user.listings = userListingsRes.rows;
     user.bookings = userBookingsRes.rows;
-    
+
     return user;
   }
 
@@ -176,9 +178,9 @@ class User {
    * all the fields; this only changes provided ones.
    *
    * Data can include:
-   *   { firstName, lastName, password, email, isAdmin }
+   *   { id, firstName, lastName, password, bio }
    *
-   * Returns { username, firstName, lastName, email, isAdmin }
+   * Returns { id, firstName, lastName, email, bio, isAdmin }
    *
    * Throws NotFoundError if not found.
    *
@@ -187,7 +189,7 @@ class User {
    * or a serious security risks are opened.
    */
 
-  static async update(username, data) {
+  static async update(id, data) {
     if (data.password) {
       data.password = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
     }
@@ -196,20 +198,20 @@ class User {
       data,
       {
         firstName: "first_name",
-        lastName: "last_name",
-        isAdmin: "is_admin",
+        lastName: "last_name"
       });
     const usernameVarIdx = "$" + (values.length + 1);
 
     const querySql = `UPDATE users 
                       SET ${setCols} 
-                      WHERE username = ${usernameVarIdx} 
-                      RETURNING username,
+                      WHERE id = ${usernameVarIdx} 
+                      RETURNING id,
                                 first_name AS "firstName",
                                 last_name AS "lastName",
                                 email,
+                                bio,
                                 is_admin AS "isAdmin"`;
-    const result = await db.query(querySql, [...values, username]);
+    const result = await db.query(querySql, [...values, id]);
     const user = result.rows[0];
 
     if (!user) throw new NotFoundError(`No user: ${username}`);

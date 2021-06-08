@@ -44,7 +44,7 @@ router.post("/", async function (req, res, next) {
 });
 
 
-/** GET / => { users: [ {username, firstName, lastName, email }, ... ] }
+/** GET / => { users: [ {firstName, lastName, email, isAdmin }, ... ] }
  *
  * Returns list of all users.
  *
@@ -85,14 +85,14 @@ router.get("/:id", async function (req, res, next) {
 /** PATCH /[username] { user } => { user }
  *
  * Data can include:
- *   { firstName, lastName, password, email }
+ *   { firstName, lastName, password }
  *
- * Returns { username, firstName, lastName, email, isAdmin }
+ * Returns { id, firstName, lastName, email, isAdmin }
  *
  * Authorization required: admin or same-user-as-:username
  **/
 
-router.patch("/:username", ensureCorrectUserOrAdmin, async function (req, res, next) {
+router.patch("/:id", async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, userUpdateSchema);
     if (!validator.valid) {
@@ -100,7 +100,7 @@ router.patch("/:username", ensureCorrectUserOrAdmin, async function (req, res, n
       throw new BadRequestError(errs);
     }
 
-    const user = await User.update(req.params.username, req.body);
+    const user = await User.update(req.params.id, req.body);
     return res.json({ user });
   } catch (err) {
     return next(err);

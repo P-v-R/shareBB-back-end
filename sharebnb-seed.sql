@@ -1,14 +1,16 @@
 -- both test users have the password "password"
 
-INSERT INTO users (first_name, last_name, email, password, is_admin)
+INSERT INTO users (first_name, last_name, email, bio, password, is_admin)
 VALUES ('mo',
         'enokida',
         'mo@mo.com',
+        'bio test',
         '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
         FALSE),
        ('perry',
         'von',
         'perry@perry.com',
+        'bio test',
         '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
         TRUE);
 
