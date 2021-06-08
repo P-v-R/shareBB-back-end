@@ -43,7 +43,7 @@ CREATE TABLE messages (
   from_user_id INTEGER REFERENCES users NOT NULL,
   to_user_id INTEGER REFERENCES users NOT NULL,
   message TEXT NOT NULL,
-  time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  sent_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- short sweet PK, then readable name as seperate unique field that can change(title?)

@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "properties": {
+      "listingId": {
+        "type": "integer"
+      },
+      "fromUserId": {
+        "type": "integer"
+      },
+      "toUserId": {
+        "type": "integer"
+      }
+    },
+    "additionalProperties": false,
+    "required": []
+  }
