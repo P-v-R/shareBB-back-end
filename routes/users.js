@@ -122,13 +122,14 @@ router.delete("/:id", async function (req, res, next) {
   }
 });
 
-
+// --------------------- BOOKING ------------------------
 /** POST /[id]/book/
  *
  * Returns {"booked": listingId}
  *
  * Authorization required: admin or same-user-as-:username
  * */
+
 
 router.post("/:id/book/", async function (req, res, next) {
   try {
@@ -143,6 +144,7 @@ router.post("/:id/book/", async function (req, res, next) {
     return next(err);
   }
 });
+
 
 
 module.exports = router;
