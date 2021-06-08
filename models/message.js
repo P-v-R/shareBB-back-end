@@ -95,7 +95,7 @@ class Message {
   static async findAll(searchFilters = {}) {
     const { listingId, toUserId, fromUserId } = searchFilters;
 
-    if ( toUserId === fromUserId) {
+    if ( toUserId === fromUserId && toUserId != undefined && fromUserId != undefined) {
       throw new BadRequestError("Invalid, messages to and from user cannot be the same user.");
     }
 
