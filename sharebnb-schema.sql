@@ -38,6 +38,7 @@ CREATE TABLE bookings (
 );
 -- TODO sent at better name than time, add message ID PK
 CREATE TABLE messages (
+  id SERIAL PRIMARY KEY,
   listing_id INTEGER REFERENCES listings NOT NULL,
   from_user_id INTEGER REFERENCES users NOT NULL,
   to_user_id INTEGER REFERENCES users NOT NULL,

@@ -39,8 +39,8 @@ router.post("/", async function (req, res, next) {
   //   throw new BadRequestError(errs);
   // }
 
-  const job = await Job.create(req.body);
-  return res.status(201).json({ job });
+  const listing = await Listing.create(req.body);
+  return res.status(201).json({ listing });
 });
 
 /** GET / =>
