@@ -240,33 +240,34 @@ class User {
     if (!user) throw new NotFoundError(`No user: ${id}`);
   }
 
-  /** Apply for job: update db, returns undefined.
+  /** book a listing: update db, returns undefined.
    *
-   * - username: username applying for job
-   * - jobId: job id
+   * - userId: user id applying for job
+   * - listingId: listingId id
    **/
 
-  static async applyToJob(username, jobId) {
+  static async bookListing(userId, data) {
+    const { listingId, startDate, startHour, numHours, totalPrice } = data;
     const preCheck = await db.query(
       `SELECT id
-           FROM jobs
-           WHERE id = $1`, [jobId]);
-    const job = preCheck.rows[0];
+           FROM listings
+           WHERE id = $1`, [listingId]);
+    const listing = preCheck.rows[0];
 
-    if (!job) throw new NotFoundError(`No job: ${jobId}`);
+    if (!listing) throw new NotFoundError(`No job: ${listingId}`);
 
     const preCheck2 = await db.query(
-      `SELECT username
+      `SELECT id
            FROM users
-           WHERE username = $1`, [username]);
+           WHERE id = $1`, [userId]);
     const user = preCheck2.rows[0];
 
-    if (!user) throw new NotFoundError(`No username: ${username}`);
+    if (!user) throw new NotFoundError(`No username: ${userId}`);
 
     await db.query(
-      `INSERT INTO applications (job_id, username)
-           VALUES ($1, $2)`,
-      [jobId, username]);
+      `INSERT INTO bookings (renter_id, listing_id, start_date, start_hour, num_hours, total_price)
+           VALUES ($1, $2, $3, $4, $5)`,
+      [userId, listingId, startDate, numHours, totalPrice]);
   }
 }
 

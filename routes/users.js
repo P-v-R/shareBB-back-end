@@ -123,18 +123,22 @@ router.delete("/:id", async function (req, res, next) {
 });
 
 
-/** POST /[userId]/bookings/[listingId]
+/** POST /[id]/book/
  *
  * Returns {"booked": listingId}
  *
  * Authorization required: admin or same-user-as-:username
  * */
 
-router.post("/:userId/bookings/:listingId", async function (req, res, next) {
+router.post("/:id/book/", async function (req, res, next) {
   try {
-    const listingId = +req.params.listingId;
-    await User.applyToJob(req.params.userId, listingId);
-    return res.json({ applied: listingId });
+    const validator = jsonschema.validate(req.body, userBookSchema);
+    if (!validator.valid) {
+     const errs = validator.errors.map(e => e.stack);
+     throw new BadRequestError(errs);
+    }
+    await User.bookListing(req.params.id, req.body);
+    return res.json({ applied: req.body.listingId });
   } catch (err) {
     return next(err);
   }

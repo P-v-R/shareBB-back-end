@@ -30,6 +30,7 @@ CREATE TABLE bookings (
   listing_id INTEGER REFERENCES listings,
   renter_id INTEGER REFERENCES users,
   start_date DATE NOT NULL,
+  start_hour INTEGER,
   num_hours INTEGER NOT NULL,
   total_price NUMERIC NOT NULL,
   booked_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
