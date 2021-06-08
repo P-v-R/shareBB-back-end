@@ -38,9 +38,9 @@ class Message {
           message
         ],
     );
-    const message = result.rows[0];
+    const createdMessage = result.rows[0];
 
-    return message;
+    return createdMessage;
   }
 
   /** Create WHERE clause for filters, to be used by functions that query

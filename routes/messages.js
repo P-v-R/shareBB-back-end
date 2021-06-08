@@ -9,7 +9,7 @@ const { BadRequestError } = require("../expressError");
 const { ensureAdmin } = require("../middleware/auth");
 const Message = require("../models/message");
 
-const messagesNewSchema = require("../schemas/messagesNew.json");
+const messagesNewSchema = require("../schemas/messageNew.json");
 const messageSearchSchema = require("../schemas/messageSearch.json");
 
 const router = new express.Router();

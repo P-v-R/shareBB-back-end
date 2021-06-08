@@ -6,7 +6,7 @@ const { sqlForPartialUpdate } = require("../helpers/sql");
 
 /** Related functions for companies. */
 
-class listing {
+class Company {
   /** Create a listing (from data), update db, return new listing data.
    *
    * data should be {  }
