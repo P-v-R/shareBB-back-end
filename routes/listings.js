@@ -22,11 +22,34 @@ const router = express.Router({ mergeParams: true });
 
 
 
-/** POST / { job } => { job }
+/** POST / { listing } => { id, ...listing }
  *
- * job should be { title, salary, equity, companyHandle }
+ * listing should be { address, 
+                        unit,
+                        city,
+                        state,
+                        zip,
+                        country,
+                        owner_id,
+                        title,
+                        description,
+                        photo_url,
+                        price_per_hour,
+                        min_hours }
  *
- * Returns { id, title, salary, equity, companyHandle }
+ * Returns { id, 
+ *           address, 
+             unit,
+            city,
+            state,
+            zip,
+            country,
+            owner_id,
+            title
+            description,
+            photo_url,
+            price_per_hour,
+            min_hours }
  *
  * Authorization required: admin
  */
