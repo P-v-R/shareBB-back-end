@@ -1,0 +1,32 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "properties": {
+      "listingId": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "startDate": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 10
+      },
+      "numHours": {
+        "type": "integer",
+        "maximum": 100
+      },
+      "startHour": {
+        "type": "integer",
+        "minimum":0,
+        "maximum": 2400
+      },
+      "totalPrice": {
+        "type": "integer",
+        "minimum":0,
+        "maximum": 2400
+      }
+    },
+    "additionalProperties": false,
+    "required": []
+  }
