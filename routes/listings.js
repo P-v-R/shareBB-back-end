@@ -22,11 +22,34 @@ const router = express.Router({ mergeParams: true });
 
 
 
-/** POST / { job } => { job }
+/** POST / { listing } => { id, ...listing }
  *
- * job should be { title, salary, equity, companyHandle }
+ * listing should be { address, 
+                        unit,
+                        city,
+                        state,
+                        zip,
+                        country,
+                        owner_id,
+                        title,
+                        description,
+                        photo_url,
+                        price_per_hour,
+                        min_hours }
  *
- * Returns { id, title, salary, equity, companyHandle }
+ * Return will be { id, 
+                    address, 
+                    unit,
+                    city,
+                    state,
+                    zip,
+                    country,
+                    owner_id,
+                    title
+                    description,
+                    photo_url,
+                    price_per_hour,
+                    min_hours }
  *
  * Authorization required: admin
  */
@@ -39,8 +62,8 @@ router.post("/", async function (req, res, next) {
   //   throw new BadRequestError(errs);
   // }
 
-  const job = await Job.create(req.body);
-  return res.status(201).json({ job });
+  const listing = await Listing.create(req.body);
+  return res.status(201).json({ listing });
 });
 
 /** GET / =>
