@@ -9,8 +9,8 @@ const { ensureCorrectUserOrAdmin, ensureAdmin } = require("../middleware/auth");
 const { BadRequestError } = require("../expressError");
 const User = require("../models/user");
 const { createToken } = require("../helpers/tokens");
-const userNewSchema = require("../schemas/userNew.json");
-const userUpdateSchema = require("../schemas/userUpdate.json");
+//const userNewSchema = require("../schemas/userNew.json");
+//const userUpdateSchema = require("../schemas/userUpdate.json");
 
 const router = express.Router();
 
@@ -27,7 +27,7 @@ const router = express.Router();
  * Authorization required: admin
  **/
 
-router.post("/", ensureAdmin, async function (req, res, next) {
+router.post("/", async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, userNewSchema);
     if (!validator.valid) {
@@ -51,7 +51,7 @@ router.post("/", ensureAdmin, async function (req, res, next) {
  * Authorization required: admin
  **/
 
-router.get("/", ensureAdmin, async function (req, res, next) {
+router.get("/", async function (req, res, next) {
   try {
     const users = await User.findAll();
     return res.json({ users });
@@ -63,15 +63,18 @@ router.get("/", ensureAdmin, async function (req, res, next) {
 
 /** GET /[username] => { user }
  *
- * Returns { username, firstName, lastName, isAdmin, jobs }
- *   where jobs is { id, title, companyHandle, companyName, state }
- *
- * Authorization required: admin or same user-as-:username
+ * Returns { id, firstName, lastName, isAdmin, listings, bookings, messages }
+ *   where listings is { id, address, unit, city, state, zip, country, owner_id, title, description, photo_url, price_per_hour, min_hours }
+ *   where bookings is { id, listing_id, renter_id, start_date, num_hours, total_price, booked_at }
+ *   where messages is { listing_id, from_user_id, to_user_id, message, time}
+ * 
+ * TODO: Authorization required: admin or same user-as-:username
  **/
 
-router.get("/:username", ensureCorrectUserOrAdmin, async function (req, res, next) {
+router.get("/:id", async function (req, res, next) {
   try {
-    const user = await User.get(req.params.username);
+    console.log("getting user")
+    const user = await User.get(req.params.id);
     return res.json({ user });
   } catch (err) {
     return next(err);
