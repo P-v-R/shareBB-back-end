@@ -17,7 +17,7 @@ CREATE TABLE listings (
   state VARCHAR(2) NOT NULL,
   zip VARCHAR(10) NOT NULL,
   country VARCHAR(3) NOT NULL,
-  owner_id INTEGER REFERENCES users,
+  owner_id INTEGER NOT NULL REFERENCES users,
   title VARCHAR(50) NOT NULL,
   description TEXT NOT NULL,
   photo_url TEXT,
@@ -27,8 +27,8 @@ CREATE TABLE listings (
 -- TODO refactor to single data, not start time and start hour / startat endat 
 CREATE TABLE bookings (
   id SERIAL PRIMARY KEY,
-  listing_id INTEGER REFERENCES listings,
-  renter_id INTEGER REFERENCES users,
+  listing_id INTEGER NOT NULL REFERENCES listings,
+  renter_id INTEGER NOT NULL REFERENCES users,
   start_date DATE NOT NULL,
   start_hour INTEGER,
   num_hours INTEGER NOT NULL,
@@ -37,9 +37,9 @@ CREATE TABLE bookings (
 );
 -- TODO sent at better name than time, add message ID PK
 CREATE TABLE messages (
-  listing_id INTEGER REFERENCES listings,
-  from_user_id INTEGER REFERENCES users,
-  to_user_id INTEGER REFERENCES users,
+  listing_id INTEGER NOT NULL REFERENCES listings,
+  from_user_id INTEGER NOT NULL REFERENCES users,
+  to_user_id INTEGER NOT NULL REFERENCES users,
   message TEXT NOT NULL,
   time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -50,8 +50,8 @@ CREATE TABLE tags (
 );
 -- TODO composite primary KEY (both pk) 
 CREATE TABLE listings_to_tags (
-  listing_id INTEGER REFERENCES listings,
-  tag VARCHAR(20) REFERENCES tags
+  listing_id INTEGER  NOT NULL REFERENCES listings,
+  tag VARCHAR(20) NOT NULL REFERENCES tags
 );
 
 -- TODO all REFRENCES should be NOT NULL
