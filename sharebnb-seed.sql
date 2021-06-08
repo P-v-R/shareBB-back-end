@@ -33,9 +33,9 @@ INSERT INTO listings (address,
                         price_per_hour,
                         min_hours
                         )
-VALUES ('123 test st', 'A', 'Los Angeles', 'CA', "90064", 'USA', 1, 'mo test listing', 'this is my listing description',
+VALUES ('123 test st', 'A', 'Los Angeles', 'CA', '90064', 'USA', 1, 'mo test listing', 'this is my listing description',
         NULL, 50.50 , 2),
-        ('1111 test ave', '2B', 'Los Angeles', 'CA', "90010", 'USA', 2, 'perry test listing', 'this is my listing description',
+        ('1111 test ave', '2B', 'Los Angeles', 'CA', '90010', 'USA', 2, 'perry test listing', 'this is my listing description',
         NULL, 100, 5);
 
 INSERT INTO bookings (listing_id, renter_id, start_date, start_hour, num_hours, total_price)

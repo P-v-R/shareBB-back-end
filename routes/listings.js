@@ -14,6 +14,13 @@ const Listing = require("../models/Listing");
 
 const router = express.Router({ mergeParams: true });
 
+// GET all listings 
+// GET one listing
+// POST new listing 
+// PATCH edit listing 
+// DELETE delete listing 
+
+
 
 /** POST / { job } => { job }
  *
@@ -25,11 +32,12 @@ const router = express.Router({ mergeParams: true });
  */
 
 router.post("/", async function (req, res, next) {
-  const validator = jsonschema.validate(req.body, jobNewSchema);
-  if (!validator.valid) {
-    const errs = validator.errors.map(e => e.stack);
-    throw new BadRequestError(errs);
-  }
+  // TODO : add validator schema for get all listings 
+  // const validator = jsonschema.validate(req.body, jobNewSchema);
+  // if (!validator.valid) {
+  //   const errs = validator.errors.map(e => e.stack);
+  //   throw new BadRequestError(errs);
+  // }
 
   const job = await Job.create(req.body);
   return res.status(201).json({ job });
