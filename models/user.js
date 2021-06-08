@@ -57,7 +57,7 @@ class User {
    **/
 
   static async register(
-    { password, firstName, lastName, email }) {
+    { firstName, lastName, email, password, bio }) {
     const duplicateCheck = await db.query(
       `SELECT email
            FROM users
@@ -76,7 +76,8 @@ class User {
            (password,
             first_name,
             last_name,
-            email)
+            email,
+            bio)
            VALUES ($1, $2, $3, $4, $5, $6)
            RETURNING id, first_name AS "firstName", last_name AS "lastName", email, is_admin AS "isAdmin"`,
       [
@@ -84,6 +85,7 @@ class User {
         firstName,
         lastName,
         email,
+        bio
       ],
     );
 
@@ -178,7 +180,7 @@ class User {
    * all the fields; this only changes provided ones.
    *
    * Data can include:
-   *   { id, firstName, lastName, password, bio }
+   *   { firstName, lastName, password, bio }
    *
    * Returns { id, firstName, lastName, email, bio, isAdmin }
    *
@@ -222,17 +224,20 @@ class User {
 
   /** Delete given user from database; returns undefined. */
 
-  static async remove(username) {
+  static async remove(id) {
     let result = await db.query(
       `DELETE
            FROM users
-           WHERE username = $1
-           RETURNING username`,
-      [username],
+           WHERE id = $1
+           RETURNING id,
+           first_name AS "firstName",
+           last_name AS "lastName",
+           email`,
+      [id],
     );
     const user = result.rows[0];
 
-    if (!user) throw new NotFoundError(`No user: ${username}`);
+    if (!user) throw new NotFoundError(`No user: ${id}`);
   }
 
   /** Apply for job: update db, returns undefined.

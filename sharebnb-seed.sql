@@ -12,7 +12,13 @@ VALUES ('mo',
         'perry@perry.com',
         'bio test',
         '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
-        TRUE);
+        TRUE),
+        ('testdelete',
+        'testdelete',
+        'test@test.com',
+        'bio test',
+        '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
+        FALSE);
 
 INSERT INTO listings (address, 
                         unit,
