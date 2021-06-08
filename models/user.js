@@ -78,7 +78,7 @@ class User {
             last_name,
             email,
             bio)
-           VALUES ($1, $2, $3, $4, $5, $6)
+           VALUES ($1, $2, $3, $4, $5)
            RETURNING id, first_name AS "firstName", last_name AS "lastName", email, is_admin AS "isAdmin"`,
       [
         hashedPassword,

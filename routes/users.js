@@ -9,8 +9,8 @@ const { ensureCorrectUserOrAdmin, ensureAdmin } = require("../middleware/auth");
 const { BadRequestError } = require("../expressError");
 const User = require("../models/user");
 const { createToken } = require("../helpers/tokens");
-//const userNewSchema = require("../schemas/userNew.json");
-//const userUpdateSchema = require("../schemas/userUpdate.json");
+const userNewSchema = require("../schemas/userNew.json");
+const userUpdateSchema = require("../schemas/userUpdate.json");
 
 const router = express.Router();
 
@@ -29,11 +29,11 @@ const router = express.Router();
 
 router.post("/", async function (req, res, next) {
   try {
-    //const validator = jsonschema.validate(req.body, userNewSchema);
-    //if (!validator.valid) {
-    //  const errs = validator.errors.map(e => e.stack);
-    //  throw new BadRequestError(errs);
-    }
+    const validator = jsonschema.validate(req.body, userNewSchema);
+    if (!validator.valid) {
+     const errs = validator.errors.map(e => e.stack);
+     throw new BadRequestError(errs);
+   }
 
     const user = await User.register(req.body);
     const token = createToken(user);
@@ -94,15 +94,15 @@ router.get("/:id", async function (req, res, next) {
 
 router.patch("/:id", async function (req, res, next) {
   try {
-    //const validator = jsonschema.validate(req.body, userUpdateSchema);
-    //if (!validator.valid) {
-    //  const errs = validator.errors.map(e => e.stack);
-    //  throw new BadRequestError(errs);
-    //}
+    const validator = jsonschema.validate(req.body, userUpdateSchema);
+    if (!validator.valid) {
+     const errs = validator.errors.map(e => e.stack);
+     throw new BadRequestError(errs);
+    }
 
     const user = await User.update(req.params.id, req.body);
-    return res.json({ user });
-  } catch (err) {
+    return res.json({ user });} 
+    catch (err) {
     return next(err);
   }
 });
@@ -123,18 +123,18 @@ router.delete("/:id", async function (req, res, next) {
 });
 
 
-/** POST /[username]/jobs/[id]  { state } => { application }
+/** POST /[userId]/bookings/[listingId]
  *
- * Returns {"applied": jobId}
+ * Returns {"booked": listingId}
  *
  * Authorization required: admin or same-user-as-:username
  * */
 
-router.post("/:username/jobs/:id", ensureCorrectUserOrAdmin, async function (req, res, next) {
+router.post("/:userId/bookings/:listingId", async function (req, res, next) {
   try {
-    const jobId = +req.params.id;
-    await User.applyToJob(req.params.username, jobId);
-    return res.json({ applied: jobId });
+    const listingId = +req.params.listingId;
+    await User.applyToJob(req.params.userId, listingId);
+    return res.json({ applied: listingId });
   } catch (err) {
     return next(err);
   }
