@@ -38,11 +38,12 @@ CREATE TABLE bookings (
 );
 -- TODO sent at better name than time, add message ID PK
 CREATE TABLE messages (
+  id SERIAL PRIMARY KEY,
   listing_id INTEGER REFERENCES listings NOT NULL,
   from_user_id INTEGER REFERENCES users NOT NULL,
   to_user_id INTEGER REFERENCES users NOT NULL,
   message TEXT NOT NULL,
-  time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  sent_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- short sweet PK, then readable name as seperate unique field that can change(title?)
