@@ -145,4 +145,4 @@ class Message {
 }
 
 
-module.exports = Company;
+module.exports = Message;
