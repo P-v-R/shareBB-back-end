@@ -5,10 +5,13 @@ const express = require("express");
 const { BadRequestError } = require("../expressError");
 const { ensureAdmin } = require("../middleware/auth");
 const Listing = require("../models/Listing");
-// const jobNewSchema = require("../schemas/jobNew.json");
-// const jobUpdateSchema = require("../schemas/jobUpdate.json");
-// const jobSearchSchema = require("../schemas/jobSearch.json");
+
+
+const listingNewSchema = require("../schemas/listingsNew.json");
+
 const router = express.Router({ mergeParams: true });
+
+
 // GET all listings 
 // GET one listing
 // POST new listing 
@@ -45,16 +48,22 @@ const router = express.Router({ mergeParams: true });
  *
  * Authorization required: admin
  */
+
+
 router.post("/", async function (req, res, next) {
-  // TODO : add validator schema for get all listings 
   // const validator = jsonschema.validate(req.body, jobNewSchema);
-  // if (!validator.valid) {
-  //   const errs = validator.errors.map(e => e.stack);
-  //   throw new BadRequestError(errs);
-  // }
+  
+  const validator = jsonschema.validate(req.body, listingNewSchema);
+  if (!validator.valid) {
+    const errs = validator.errors.map(e => e.stack);
+    throw new BadRequestError(errs);
+  }
+
   const listing = await Listing.create(req.body);
   return res.status(201).json({ listing });
 });
+
+
 /** GET all listings / =>
  *   { listings: [      id,
  *                      address, 
@@ -81,6 +90,9 @@ router.get("/", async function (req, res, next) {
     return next(err);
   }
 });
+
+
+
 /** GET single listing  /[listingId] => { Listing }
  *
  * Returns { id,
@@ -109,6 +121,9 @@ router.get("/:id", async function (req, res, next) {
     return next(err);
   }
 });
+
+
+
 /** PATCH /[listingId]  { fld1, fld2, ... } => {listing }
  *
  * Data can include: { title, description, photoUrl, price_per_hour, min_hours }

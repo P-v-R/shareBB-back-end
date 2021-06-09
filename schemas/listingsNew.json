@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string"
+    },
+    "unit": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "zip": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "owner_id": {
+      "type": "integer"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "photo_url": {
+      "type": "string"
+    },
+    "price_per_hour": {
+      "type": "integer"
+    },
+    "min_hours": {
+      "type": "integer"
+    }  
+  },
+  "additionalProperties": false,
+  "required": [
+      "address", 
+      "city", 
+      "state", 
+      "zip", 
+      "country", 
+      "owner_id", 
+      "title", 
+      "description", 
+      "price_per_hour", 
+      "min_hours"
+    ]
+}
+
+
