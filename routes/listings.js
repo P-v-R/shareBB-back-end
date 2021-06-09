@@ -7,16 +7,11 @@ const { ensureAdmin } = require("../middleware/auth");
 const Listing = require("../models/Listing");
 
 
-const listingNewSchema = require("../schemas/listingsNew.json");
+const listingsNewSchema = require("../schemas/listingsNew.json");
+const listingUpdateSchema = require("../schemas/listingUpdate.json");
 
 const router = express.Router({ mergeParams: true });
 
-
-// GET all listings 
-// GET one listing
-// POST new listing 
-// PATCH edit listing 
-// DELETE delete listing 
 /** POST / { listing } => { id, ...listing }
  *
  * listing should be { address, 
@@ -49,19 +44,16 @@ const router = express.Router({ mergeParams: true });
  * Authorization required: admin
  */
 
-
-router.post("/", async function (req, res, next) {
-  // const validator = jsonschema.validate(req.body, jobNewSchema);
-  
-  const validator = jsonschema.validate(req.body, listingNewSchema);
+router.post("/", async function (req, res, next) {  
+  const validator = jsonschema.validate(req.body, listingsNewSchema);
   if (!validator.valid) {
     const errs = validator.errors.map(e => e.stack);
     throw new BadRequestError(errs);
   }
-
   const listing = await Listing.create(req.body);
   return res.status(201).json({ listing });
 });
+
 
 
 /** GET all listings / =>
@@ -81,6 +73,7 @@ router.post("/", async function (req, res, next) {
  *
  * Authorization required: none
  */
+
 router.get("/", async function (req, res, next) {
   try {
     console.log("getting all Listings")
@@ -112,6 +105,7 @@ router.get("/", async function (req, res, next) {
  *
  * Authorization required: none
  */
+
 router.get("/:id", async function (req, res, next) {
   try {
     console.log("getting single Listing")
@@ -144,20 +138,25 @@ router.get("/:id", async function (req, res, next) {
  *
  * TODO : authorization required: admin or owner
  */
+
 router.patch("/:id", async function (req, res, next) {
-  // TODO ADD VALIDATOR
-  //const validator = jsonschema.validate(req.body, jobUpdateSchema);
-  // if (!validator.valid) {
-  //   const errs = validator.errors.map(e => e.stack);
-  //   throw new BadRequestError(errs);
-  // }
+  
+  const validator = jsonschema.validate(req.body, listingUpdateSchema);
+  if (!validator.valid) {
+    const errs = validator.errors.map(e => e.stack);
+    throw new BadRequestError(errs);
+  }
   const listing = await Listing.update(req.params.id, req.body);
   return res.json({ listing });
 });
+
+
+
 /** DELETE /[listingId]  =>  { deleted: id }
  *
  * TODO : Authorization required: admin, or owner
  */
+
 router.delete("/:id", async function (req, res, next) {
   await Listing.remove(req.params.id);
   return res.json({ deleted: +req.params.id });

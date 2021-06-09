@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "photo_url": {
+      "type": "string"
+    },
+    "price_per_hour": {
+      "type": "integer"
+    },
+    "min_hours": {
+      "type": "integer"
+    }  
+  },
+  "additionalProperties": false,
+  "required": []
+}
+
+
