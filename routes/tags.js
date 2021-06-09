@@ -9,70 +9,106 @@ const { BadRequestError } = require("../expressError");
 const { ensureAdmin } = require("../middleware/auth");
 const Tag = require("../models/tag");
 
-// const tagsNewSchema = require("../schemas/tagNew.json");
-// const tagSearchSchema = require("../schemas/tagSearch.json");
+const tagNewSchema = require("../schemas/tagNew.json");
+const tagSearchSchema = require("../schemas/tagSearch.json");
+const tagUpdateSchema = require("../schemas/tagUpdate.json");
 
 const router = new express.Router();
 
 
 /** POST / { tag } =>  { tag }
  *
- * tag should be { tag, fromUserId, toUserId, message }
+ * tag should be { handle, description }
  *
- * Returns { msgId, listingId, fromUserId, toUserId, message, sentAt }
+ * Returns { handle, description }
  *
  */
 
 router.post("/", async function (req, res, next) {
-  const validator = jsonschema.validate(req.body, messagesNewSchema);
+  const validator = jsonschema.validate(req.body, tagNewSchema);
   if (!validator.valid) {
     const errs = validator.errors.map(e => e.stack);
     throw new BadRequestError(errs);
   }
 
-  const message = await Message.create(req.body);
-  return res.status(201).json({ message });
+  const tags = await Tag.create(req.body);
+  return res.status(201).json({ tags });
 });
 
 /** GET /  =>
- *   { messages: [ { msgId, listingId, fromUserId, toUserId, message, sentAt }, ...] }
+ *   { tags: [ { handle, description }, ...] }
  *
  * Can filter on provided search filters:
- * - listingId
- * - fromUserId
- * - toUserId
+ * - handle
+ * - description
  *
  * Authorization required: none
  */
 
 router.get("/", async function (req, res, next) {
   const q = req.query;
-  // arrive as strings from querystring, but we want as ints
-  if (q.listingId !== undefined) q.listingId = +q.listingId;
-  if (q.fromUserId !== undefined) q.fromUserId = +q.fromUserId;
-  if (q.toUserId !== undefined) q.toUserId = +q.toUserId;
 
-  const validator = jsonschema.validate(q, messageSearchSchema);
+  const validator = jsonschema.validate(q, tagSearchSchema);
   if (!validator.valid) {
     const errs = validator.errors.map(e => e.stack);
     throw new BadRequestError(errs);
   }
 
-  const messages = await Message.findAll(q);
-  return res.json({ messages });
+  const tags = await Tag.findAll(q);
+  return res.json({ tags });
 });
 
-/** GET /[id]  =>  { message }
+/** GET /[handle]  =>  { tag }
  *
- *  { msgId, listingId, fromUserId, toUserId, message, sentAt }
+ *  { handle, description }
  *
  * Authorization required: none
  */
 
-router.get("/:id", async function (req, res, next) {
-  const message = await Message.get(req.params.id);
-  return res.json({ message });
+router.get("/:handle", async function (req, res, next) {
+  const tag = await Tag.get(req.params.handle);
+  return res.json({ tag });
 });
 
+/** PATCH /[handle] { handle } => { handle }
+ *
+ * Data can include:
+ *   { description }
+ *
+ * Returns { handle, description }
+ *
+ * Authorization required: admin or same-user-as-:username
+ **/
+
+
+router.patch("/:handle", async function (req, res, next) {
+  try {
+    const validator = jsonschema.validate(req.body, tagUpdateSchema);
+    if (!validator.valid) {
+     const errs = validator.errors.map(e => e.stack);
+     throw new BadRequestError(errs);
+    }
+
+    const tag = await Tag.update(req.params.handle, req.body.description);
+    return res.json({ tag });} 
+    catch (err) {
+    return next(err);
+  }
+});
+
+
+/** DELETE /[handle]  =>  { deleted: ihandled }
+ *
+ * Authorization required: admin
+ **/
+
+router.delete("/:handle", async function (req, res, next) {
+  try {
+    await Tag.remove(req.params.handle);
+    return res.json({ deleted: req.params.handle });
+  } catch (err) {
+    return next(err);
+  }
+});
 
 module.exports = router;

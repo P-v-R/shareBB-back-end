@@ -1,11 +1,8 @@
 "use strict";
-
 const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
 const { sqlForPartialUpdate } = require("../helpers/sql");
-
 /** Related functions for companies. */
-
 class Listing {
   /** Create a listing (from data), update db, return new listing data.
    *
@@ -26,8 +23,7 @@ class Listing {
    *
    * Throws BadRequestError if listing already in database.
    * */
-
-  static async create({ 
+  static async create({
     address,
     unit,
     city,
@@ -46,10 +42,8 @@ class Listing {
            FROM listings
            WHERE address = $1`,
       [address]);
-
     if (duplicateCheck.rows[0])
       throw new BadRequestError(`Duplicate listing: ${handle}`);
-
     const result = await db.query(
       `INSERT INTO listings
          ( address, 
@@ -95,12 +89,14 @@ class Listing {
         min_hours
       ],
     );
-
     const listing = result.rows[0];
-
     return listing;
   }
-
+  /** 
+   * find all listings in DB
+   * 
+   * 
+   *   */
   static async findAll() {
     const result = await db.query(
       `SELECT id,
@@ -119,11 +115,16 @@ class Listing {
            FROM listings
            ORDER BY zip`,
     );
-
+    if (!result.rows) {
+      throw new NotFoundError
+    }
     return result.rows;
   }
-
-  static async findAll() {
+  /** 
+   * find single listing in DB bu the listing ID
+   * 
+   *  */
+  static async get(id) {
     const result = await db.query(
       `SELECT id,
               address,
@@ -139,172 +140,89 @@ class Listing {
               price_per_hour AS pricePerHour,
               min_hours AS minHours
            FROM listings
+           WHERE id = $1
            ORDER BY zip`,
-    );
-
-    return result.rows;
+      [id]);
+    return result.rows[0];
   }
-
-  
-  // /** Create WHERE clause for filters, to be used by functions that query
-  //  * with filters.
-  //  *
-  //  * searchFilters (all optional):
-  //  * - minEmployees
-  //  * - maxEmployees
-  //  * - name (will find case-insensitive, partial matches)
-  //  *
-  //  * Returns {
-  //  *  where: "WHERE num_employees >= $1 AND name ILIKE $2",
-  //  *  vals: [100, '%Apple%']
-  //  * }
-  //  */
-
-  // static _filterWhereBuilder({ minEmployees, maxEmployees, name }) {
-  //   let whereParts = [];
-  //   let vals = [];
-
-  //   if (minEmployees !== undefined) {
-  //     vals.push(minEmployees);
-  //     whereParts.push(`num_employees >= $${vals.length}`);
-  //   }
-
-  //   if (maxEmployees !== undefined) {
-  //     vals.push(maxEmployees);
-  //     whereParts.push(`num_employees <= $${vals.length}`);
-  //   }
-
-  //   if (name) {
-  //     vals.push(`%${name}%`);
-  //     whereParts.push(`name ILIKE $${vals.length}`);
-  //   }
-
-  //   const where = (whereParts.length > 0) ?
-  //       "WHERE " + whereParts.join(" AND ")
-  //       : "";
-
-  //   return { where, vals };
-  // }
-
-  // /** Find all companies (optional filter on searchFilters).
-  //  *
-  //  * searchFilters (all optional):
-  //  * - minEmployees
-  //  * - maxEmployees
-  //  * - name (will find case-insensitive, partial matches)
-  //  *
-  //  * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
-  //  * */
-
-  // static async findAll(searchFilters = {}) {
-  //   const { minEmployees, maxEmployees, name } = searchFilters;
-
-  //   if (minEmployees > maxEmployees) {
-  //     throw new BadRequestError("Min employees cannot be greater than max");
-  //   }
-
-  //   const { where, vals } = this._filterWhereBuilder({
-  //     minEmployees, maxEmployees, name,
-  //   });
-
-  //   const companiesRes = await db.query(`
-  //     SELECT handle,
-  //            name,
-  //            description,
-  //            num_employees AS "numEmployees",
-  //            logo_url AS "logoUrl"
-  //       FROM companies ${where}
-  //       ORDER BY name
-  //   `, vals);
-  //   return companiesRes.rows;
-  // }
-
-  // /** Given a company handle, return data about company.
-  //  *
-  //  * Returns { handle, name, description, numEmployees, logoUrl, jobs }
-  //  *   where jobs is [{ id, title, salary, equity }, ...]
-  //  *
-  //  * Throws NotFoundError if not found.
-  //  **/
-
-  // static async get(handle) {
-  //   const companyRes = await db.query(
-  //       `SELECT handle,
-  //               name,
-  //               description,
-  //               num_employees AS "numEmployees",
-  //               logo_url AS "logoUrl"
-  //          FROM companies
-  //          WHERE handle = $1`,
-  //       [handle]);
-
-  //   const company = companyRes.rows[0];
-
-  //   if (!company) throw new NotFoundError(`No company: ${handle}`);
-
-  //   const jobsRes = await db.query(
-  //       `SELECT id, title, salary, equity
-  //          FROM jobs
-  //          WHERE company_handle = $1
-  //          ORDER BY id`,
-  //       [handle],
-  //   );
-
-  //   company.jobs = jobsRes.rows;
-
-  //   return company;
-  // }
-
-  // /** Update company data with `data`.
-  //  *
-  //  * This is a "partial update" --- it's fine if data doesn't contain all the
-  //  * fields; this only changes provided ones.
-  //  *
-  //  * Data can include: {name, description, numEmployees, logoUrl}
-  //  *
-  //  * Returns {handle, name, description, numEmployees, logoUrl}
-  //  *
-  //  * Throws NotFoundError if not found.
-  //  */
-
-  // static async update(handle, data) {
-  //   const { setCols, values } = sqlForPartialUpdate(
-  //       data,
-  //       {
-  //         numEmployees: "num_employees",
-  //         logoUrl: "logo_url",
-  //       });
-  //   const handleVarIdx = "$" + (values.length + 1);
-
-  //   const querySql = `UPDATE companies
-  //                     SET ${setCols}
-  //                       WHERE handle = ${handleVarIdx}
-  //                       RETURNING handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl"`;
-  //   const result = await db.query(querySql, [...values, handle]);
-  //   const company = result.rows[0];
-
-  //   if (!company) throw new NotFoundError(`No company: ${handle}`);
-
-  //   return company;
-  // }
-
-  // /** Delete given company from database; returns undefined.
-  //  *
-  //  * Throws NotFoundError if company not found.
-  //  **/
-
-  // static async remove(handle) {
-  //   const result = await db.query(
-  //       `DELETE
-  //          FROM companies
-  //          WHERE handle = $1
-  //          RETURNING handle`,
-  //       [handle]);
-  //   const company = result.rows[0];
-
-  //   if (!company) throw new NotFoundError(`No company: ${handle}`);
-  // }
+  /** Update listing data with `data`.
+   *
+   * This is a "partial update" --- it's fine if data doesn't contain all the
+   * fields; this only changes provided ones.
+   *
+   * Data can include: {  
+           title, 
+           description, 
+           photo_url, 
+           price_per_hour, 
+           min_hours
+        }
+   *
+   * Returns {
+   *       id,
+   *       address, 
+           unit, 
+           city, 
+           state, 
+           zip, 
+           country, 
+           owner_id, 
+           title, 
+           description, 
+           photo_url, 
+           price_per_hour, 
+           min_hours}
+   *
+   * Throws NotFoundError if not found.
+   */
+  static async update(id, data) {
+    const { setCols, values } = sqlForPartialUpdate(
+        data,
+        {
+          title: "title",
+          description: "description",
+          photo_url: "photo_url",
+          photoUrl: "photo_url",
+          pricePerHour: "price_per_hour",
+          minHours:"min_hours",
+        });
+    const handleVarIdx = "$" + (values.length + 1);
+    console.log("handleVarIdx ====>", handleVarIdx)
+    const querySql = `UPDATE listings
+                      SET ${setCols}
+                        WHERE id = ${handleVarIdx}
+                        RETURNING 
+                              id, 
+                              address,
+                              unit, 
+                              city, 
+                              state,
+                              zip, 
+                              country, 
+                              owner_id,
+                              title, 
+                              description,
+                              photo_url, 
+                              price_per_hour,
+                              min_hours`;
+    const result = await db.query(querySql, [...values, id]);
+    const listing = result.rows[0];
+    if (!listing) throw new NotFoundError(`No listing: ${id}`);
+    return listing;
+  }
+  /** Delete given listing from database; returns undefined.
+   *
+   * Throws NotFoundError if company not found.
+   **/
+  static async remove(id) {
+    const result = await db.query(
+      `DELETE
+           FROM listings
+           WHERE id = $1
+           RETURNING id`,
+      [id]);
+    const company = result.rows[0];
+    if (!company) throw new NotFoundError(`No listing: ${title}`);
+  }
 }
-
-
 module.exports = Listing;
