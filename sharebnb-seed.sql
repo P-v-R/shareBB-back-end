@@ -34,9 +34,14 @@ INSERT INTO listings (address,
                         min_hours
                         )
 VALUES ('123 test st', 'A', 'Los Angeles', 'CA', '90064', 'USA', 1, 'mo test listing', 'this is my listing description',
-        NULL, 50.50 , 2),
+        '1.jpg', 50.50 , 2),
         ('1111 test ave', '2B', 'Los Angeles', 'CA', '90010', 'USA', 2, 'perry test listing', 'this is my listing description',
-        NULL, 100, 5);
+        '2.jpg', 100, 5),
+        ('2222 test ave', '', 'Los Angeles', 'CA', '90010', 'USA', 2, 'perry test listing', 'this is my listing description',
+        '3.jpg', 100, 5),
+        ('3333 test ave', '10B', 'Los Angeles', 'CA', '90020', 'USA', 2, 'perry test listing', 'this is my listing description',
+        '801c39b7-03d3-4333-9aa7-7893cc2c8085', 100, 5),
+
 
 INSERT INTO bookings (listing_id, renter_id, start_date, start_hour, num_hours, total_price)
 VALUES (2, 1, '2021-07-20', 1330, 4, 400),

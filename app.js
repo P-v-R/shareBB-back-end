@@ -38,13 +38,15 @@ app.use("/tags", tagsRoutes);
  */
 
  app.post("/image", upload.array('file', 1), async function (req, res, next) {
-   console.log("REQUEST IMAGE BODY ======> ", req.files)
+   console.log("REQUEST IMAGE BODY ======> ", req.files);
+   console.log("UUID key from front end ======> ", req.body.listingKey);
+  
   const image = req.files[0];
   const client = new S3Client({region: "us-east-2"});
 
   const uploadParams = {
     Bucket: "sharebnb-mo",
-    Key: image.originalname,
+    Key: req.body.listingKey,
     Body: image.buffer,
     Tagging: "public=yes"
   };
