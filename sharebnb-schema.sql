@@ -16,7 +16,7 @@ CREATE TABLE listings (
   city VARCHAR(30) NOT NULL,
   state VARCHAR(2) NOT NULL,
   zip VARCHAR(10) NOT NULL,
-  country VARCHAR(3) NOT NULL,
+  country VARCHAR(3) NOT NULL DEFAULT 'USA',
   owner_id INTEGER REFERENCES users NOT NULL,
   title VARCHAR(50) NOT NULL,
   description TEXT NOT NULL,

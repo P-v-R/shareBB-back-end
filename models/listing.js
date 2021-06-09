@@ -113,11 +113,31 @@ class Listing {
               price_per_hour AS pricePerHour,
               min_hours AS minHours
            FROM listings
-           ORDER BY zip`,
+           ORDER BY zip
+           `,
     );
     if (!result.rows) {
       throw new NotFoundError
+      
     }
+
+    // console.log("rows ======>", result.rows)
+    for (let listing of result.rows){
+      console.log("listing id ====>", listing.id)
+      const tagsResult = await db.query(
+              `SELECT t.tag 
+              FROM listings AS l 
+              FULL OUTER JOIN listings_to_tags as t 
+              ON l.id = t.listing_id 
+              WHERE id = $1;`,[listing.id]
+      )
+      console.log("tag results ===>", tagsResult.rows[0])
+    }
+
+
+
+
+
     return result.rows;
   }
   /** 

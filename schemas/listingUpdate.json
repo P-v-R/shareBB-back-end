@@ -17,10 +17,8 @@
     },
     "min_hours": {
       "type": "integer"
-    }  
+    }
   },
   "additionalProperties": false,
   "required": []
 }
-
-

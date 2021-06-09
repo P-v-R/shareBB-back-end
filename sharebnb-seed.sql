@@ -73,4 +73,4 @@ INSERT INTO listings_to_tags (listing_id, tag)
 VALUES (1, 'pool'),
         (1, 'yard'),
         (2, 'trampoline'),
-        (2, 'grill');
+        (2, 'grill')

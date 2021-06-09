@@ -20,7 +20,6 @@ const router = new express.Router();
  * message should be { listingId, fromUserId, toUserId, message }
  *
  * Returns { msgId, listingId, fromUserId, toUserId, message, sentAt }
- *
  */
 
 router.post("/", async function (req, res, next) {
@@ -29,12 +28,12 @@ router.post("/", async function (req, res, next) {
     const errs = validator.errors.map(e => e.stack);
     throw new BadRequestError(errs);
   }
-
+  // if body passes validation return SC:201 and messages{}
   const message = await Message.create(req.body);
   return res.status(201).json({ message });
 });
 
-/** GET /  =>
+/** GET /  => 
  *   { messages: [ { msgId, listingId, fromUserId, toUserId, message, sentAt }, ...] }
  *
  * Can filter on provided search filters:
@@ -57,7 +56,7 @@ router.get("/", async function (req, res, next) {
     const errs = validator.errors.map(e => e.stack);
     throw new BadRequestError(errs);
   }
-
+    // if body passes validation return SC:201 and message{}
   const messages = await Message.findAll(q);
   return res.json({ messages });
 });
