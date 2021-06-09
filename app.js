@@ -29,6 +29,13 @@ app.use("/users", usersRoutes);
 app.use("/messages", messagesRoutes);
 app.use("/tags", tagsRoutes);
 
+/** POST / image file
+ */
+
+ app.post("/image", async function (req, res, next) {
+  return res.status(201).json("image route reached!");
+});
+
 
 /** Handle 404 errors -- this matches everything */
 app.use(function (req, res, next) {
