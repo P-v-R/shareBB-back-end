@@ -101,7 +101,49 @@ class Listing {
     return listing;
   }
 
+  static async findAll() {
+    const result = await db.query(
+      `SELECT id,
+              address,
+              unit, 
+              city,
+              state,
+              zip,
+              country,
+              owner_Id AS ownerId,
+              title,
+              description,
+              photo_url AS photoUrl,
+              price_per_hour AS pricePerHour,
+              min_hours AS minHours
+           FROM listings
+           ORDER BY zip`,
+    );
 
+    return result.rows;
+  }
+
+  static async findAll() {
+    const result = await db.query(
+      `SELECT id,
+              address,
+              unit, 
+              city,
+              state,
+              zip,
+              country,
+              owner_Id AS ownerId,
+              title,
+              description,
+              photo_url AS photoUrl,
+              price_per_hour AS pricePerHour,
+              min_hours AS minHours
+           FROM listings
+           ORDER BY zip`,
+    );
+
+    return result.rows;
+  }
 
   
   // /** Create WHERE clause for filters, to be used by functions that query
