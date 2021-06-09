@@ -40,12 +40,17 @@ app.use("/tags", tagsRoutes);
  app.post("/image", upload.array('file', 1), async function (req, res, next) {
    console.log("REQUEST IMAGE BODY ======> ", req.files)
   const image = req.files[0];
-  
+  const client = new S3Client({region: "us-east-2"});
 
-  const client = new S3Client(config);
-  const command = new PutObjectCommand(input);
+  const uploadParams = {
+    Bucket: "sharebnb-mo",
+    Key: image.originalname,
+    Body: image.buffer,
+    Tagging: "public=yes"
+  };
+  const command = new PutObjectCommand(uploadParams);
   const response = await client.send(command);
-
+  console.log("response ===>",response);
   return res.status(201).json("image route reached!");
 });
 
