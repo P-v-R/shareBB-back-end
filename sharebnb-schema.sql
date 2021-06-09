@@ -36,7 +36,7 @@ CREATE TABLE bookings (
   total_price NUMERIC NOT NULL,
   booked_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
--- TODO sent at better name than time, add message ID PK
+
 CREATE TABLE messages (
   id SERIAL PRIMARY KEY,
   listing_id INTEGER REFERENCES listings NOT NULL,
@@ -46,14 +46,15 @@ CREATE TABLE messages (
   sent_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- short sweet PK, then readable name as seperate unique field that can change(title?)
+
 CREATE TABLE tags (
-  name VARCHAR(20) PRIMARY KEY
-);
--- TODO composite primary KEY (both pk) 
-CREATE TABLE listings_to_tags (
-  listing_id INTEGER REFERENCES listings NOT NULL,
-  tag VARCHAR(20) REFERENCES tags NOT NULL
+  handle VARCHAR(20) PRIMARY KEY,
+  description TEXT NOT NULL
 );
 
--- TODO all REFRENCES should be NOT NULL
+CREATE TABLE listings_to_tags (
+  listing_id INTEGER REFERENCES listings NOT NULL,
+  tag VARCHAR(20) REFERENCES tags NOT NULL,
+  PRIMARY KEY(listing_id, tag)
+);
+

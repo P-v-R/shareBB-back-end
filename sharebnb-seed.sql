@@ -51,21 +51,21 @@ VALUES (1, 2, 1, 'from p to m'),
        (2, 1, 2, 'from m to p test');
 
 
-INSERT INTO tags (name)
-VALUES ('Swimming Pool'),
-       ('Hot Tub'),
-       ('Sauna'),
-       ('BBQ/Grill'),
-       ('Yard'),
-       ('Fire Pit'),
-       ('Gym/Workout'),
-       ('Trampoline'),
-       ('Garden'),
-       ('Music Studio'),
-       ('Patio');
+INSERT INTO tags (handle, description)
+VALUES ('pool', 'Swimming Pool'),
+       ('tub', 'Hot Tub'),
+       ('sauna', 'Sauna'),
+       ('grill', 'BBQ/Grill'),
+       ('yard', 'Yard'),
+       ('firepit', 'Fire Pit'),
+       ('gym', 'Gym/Workout'),
+       ('trampoline', 'Trampoline'),
+       ('garden', 'Garden'),
+       ('studio', 'Music Studio'),
+       ('patio', 'Patio');
 
 INSERT INTO listings_to_tags (listing_id, tag)
-VALUES (1, 'Swimming Pool'),
-        (1, 'Yard'),
-        (2, 'Trampoline'),
-        (2, 'BBQ/Grill');
+VALUES (1, 'pool'),
+        (1, 'yard'),
+        (2, 'trampoline'),
+        (2, 'grill');
