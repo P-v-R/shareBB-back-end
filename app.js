@@ -5,6 +5,9 @@
 const express = require("express");
 const cors = require("cors");
 
+const multer = require('multer');
+const upload = multer();
+
 const { NotFoundError } = require("./expressError");
 
 const { authenticateJWT } = require("./middleware/auth");
@@ -32,7 +35,8 @@ app.use("/tags", tagsRoutes);
 /** POST / image file
  */
 
- app.post("/image", async function (req, res, next) {
+ app.post("/image", upload.array(), async function (req, res, next) {
+   console.log("REQUEST IMAGE BODY ======> ", req.files, req.body)
   return res.status(201).json("image route reached!");
 });
 
