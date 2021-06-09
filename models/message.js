@@ -19,7 +19,7 @@ class Message {
   static async create({ listingId, fromUserId, toUserId, message }) {
     const duplicateCheck = await db.query(
         `SELECT message
-           FROM companies
+           FROM messages
            WHERE message = $1 AND from_user_id = $2 and to_user_id = $3`,
         [message, fromUserId, toUserId]);
 
@@ -31,12 +31,11 @@ class Message {
          (listing_id, from_user_id, to_user_id, message)
            VALUES
              ($1, $2, $3, $4)
-           RETURNING id, listing_id AS "listingId", from_user_id AS "fromUserId", to_user_id AS "toUserId, message, sent_at AS "sentAt"`,
+           RETURNING id, listing_id AS "listingId", from_user_id AS "fromUserId", to_user_id AS "toUserId", message, sent_at AS "sentAt"`,
         [listingId,
           fromUserId,
           toUserId,
-          message
-        ],
+          message],
     );
     const createdMessage = result.rows[0];
 

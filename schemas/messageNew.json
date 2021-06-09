@@ -17,5 +17,5 @@
       }
     },
     "additionalProperties": false,
-    "required": ["properties", "fromUserId", "toUserId", "message"]
+    "required": ["fromUserId", "toUserId", "message"]
   }
