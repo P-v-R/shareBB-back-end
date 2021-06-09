@@ -5,9 +5,6 @@
 const express = require("express");
 const cors = require("cors");
 
-const multer = require('multer');
-const upload = multer();
-
 const { NotFoundError } = require("./expressError");
 
 const { authenticateJWT } = require("./middleware/auth");
@@ -18,6 +15,11 @@ const usersRoutes = require("./routes/users");
 const listingsRoutes = require("./routes/listings");
 
 const morgan = require("morgan");
+const { request } = require("express");
+const multer  = require('multer');
+const upload = multer();
+
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 
 const app = express();
 
@@ -35,8 +37,15 @@ app.use("/tags", tagsRoutes);
 /** POST / image file
  */
 
- app.post("/image", upload.array(), async function (req, res, next) {
-   console.log("REQUEST IMAGE BODY ======> ", req.files, req.body)
+ app.post("/image", upload.array('file', 1), async function (req, res, next) {
+   console.log("REQUEST IMAGE BODY ======> ", req.files)
+  const image = req.files[0];
+  
+
+  const client = new S3Client(config);
+  const command = new PutObjectCommand(input);
+  const response = await client.send(command);
+
   return res.status(201).json("image route reached!");
 });
 
