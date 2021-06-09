@@ -68,12 +68,12 @@ class Listing {
             state,
             zip, 
             country, 
-            owner_id,
+            owner_id AS ownerId,
             title, 
             description,
-            photo_url, 
-            price_per_hour,
-            min_hours`,
+            photo_url AS photoUrl, 
+            price_per_hour AS pricePerHour,
+            min_hours AS minHours`,
       [
         address,
         unit,
@@ -199,12 +199,12 @@ class Listing {
                               state,
                               zip, 
                               country, 
-                              owner_id,
+                              owner_id AS ownerId,
                               title, 
                               description,
-                              photo_url, 
-                              price_per_hour,
-                              min_hours`;
+                              photo_url AS photoUrl, 
+                              price_per_hour AS pricePerHour,
+                              min_hours AS minHours`;
     const result = await db.query(querySql, [...values, id]);
     const listing = result.rows[0];
     if (!listing) throw new NotFoundError(`No listing: ${id}`);

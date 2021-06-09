@@ -2,26 +2,31 @@
 
 const db = require("../db.js");
 const User = require("../models/user");
-const Company = require("../models/company");
-const Job = require("../models/job");
+const Listing = require("../models/listing");
 const { createToken } = require("../helpers/tokens");
 
-const testJobIds = [];
+// const testJobIds = [];
 
 async function commonBeforeAll() {
   // noinspection SqlWithoutWhere
   await db.query("DELETE FROM users");
   // noinspection SqlWithoutWhere
-  await db.query("DELETE FROM companies");
+  await db.query("DELETE FROM listings");
 
-  await Company.create(
-      {
-        handle: "c1",
-        name: "C1",
-        numEmployees: 1,
-        description: "Desc1",
-        logoUrl: "http://c1.img",
-      });
+  // await Listing.create(
+  //     {
+  //       address: "123 test st",
+  //       unit: "1",
+  //       city: "Los Angeles",
+  //       state: "Ca",
+  //       zip: "90027",
+  //       country: "USA",
+  //       owner_id:"1",
+  //       title: any;
+  //       description: any;
+  //       photo_url: any;
+  //       price_per_hour: any;
+  //     });
   await Company.create(
       {
         handle: "c2",

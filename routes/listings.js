@@ -87,7 +87,6 @@ router.get("/", async function (req, res, next) {
 
 
 /** GET single listing  /[listingId] => { Listing }
- *
  * Returns { id,
  *           address, 
              unit,
