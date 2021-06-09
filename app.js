@@ -23,7 +23,7 @@ app.use(morgan("tiny"));
 app.use(authenticateJWT);
 
 // app.use("/auth", authRoutes);
-// app.use("/companies", companiesRoutes);
+app.use("/listings", listingsRoutes);
 app.use("/users", usersRoutes);
 app.use("/messages", messagesRoutes);
 

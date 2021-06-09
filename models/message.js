@@ -103,6 +103,8 @@ class Message {
       listingId, toUserId, fromUserId
     });
 
+    console.log(where);
+
     const messagesRes = await db.query(`
       SELECT id,
              listing_id AS "listingId",
@@ -111,7 +113,6 @@ class Message {
              message,
              sent_at AS "sentAt"
         FROM messages ${where}
-        GROUP BY from_user_id
         ORDER BY listing_id
     `, vals);
     return messagesRes.rows;
