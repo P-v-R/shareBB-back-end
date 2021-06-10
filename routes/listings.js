@@ -89,8 +89,8 @@ router.get("/", async function (req, res, next) {
 router.get("/search/:searchTerm", async function (req, res, next) {
   try {
     console.log("getting single Listing")
-    const listing = await Listing.search(req.params.searchTerm);
-    return res.json({ listing });
+    const listings = await Listing.search(req.params.searchTerm);
+    return res.json({ listings });
   } catch (err) {
     return next(err);
   }
