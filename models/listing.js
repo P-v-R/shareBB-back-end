@@ -121,9 +121,9 @@ class Listing {
       
     }
 
-    // console.log("rows ======>", result.rows)
+    const listings = []
     for (let listing of result.rows){
-      console.log("listing id ====>", listing.id)
+    
       const tagsResult = await db.query(
               `SELECT t.tag 
               FROM listings AS l 
@@ -131,14 +131,16 @@ class Listing {
               ON l.id = t.listing_id 
               WHERE id = $1;`,[listing.id]
       )
-      console.log("tag results ===>", tagsResult.rows[0])
+
+      const allTags = []
+      for(let keyVal of tagsResult.rows){
+        allTags.push(keyVal.tag)
+        listing = {...listing, tags:allTags}
+      }
+      listings.push(listing)
     }
 
-
-
-
-
-    return result.rows;
+    return listings;
   }
   /** 
    * find single listing in DB bu the listing ID
