@@ -82,7 +82,7 @@ describe("POST /listings", function () {
       })
 
     expect(resp.statusCode).toEqual(400)
-  })
+  });
 });
 
 

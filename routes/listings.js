@@ -88,6 +88,7 @@ router.get("/", async function (req, res, next) {
 
 
 
+
 /** GET single listing  /[listingId] => { Listing }
  * Returns { id,
  *           address, 
@@ -112,6 +113,25 @@ router.get("/:id", async function (req, res, next) {
     console.log("getting single Listing")
     const listing = await Listing.get(req.params.id);
     return res.json({ listing });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/** Search listing by tag handle, returns array of listings with matched tah handle */
+router.get("/tags/:tag", async function (req, res, next) {
+  try {
+    console.log("getting all listings with tag")
+    const listingsAll = await Listing.findAll();
+    const tag = req.params.tag.toLowerCase()
+    console.log("tag=====>", tag)
+    const listings = []
+    for (let listing of listingsAll){
+      if(listing.tags.includes(tag)){
+        listings.push(listing)
+      }
+    }
+    return res.json({ listings });
   } catch (err) {
     return next(err);
   }
