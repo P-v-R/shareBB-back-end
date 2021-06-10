@@ -3,6 +3,7 @@
 const db = require("../db.js");
 const Listing = require("../models/listing");
 const User = require("../models/user");
+const Tag = require("../models/tag")
 
 //generate user id thats in test DB
 
@@ -41,6 +42,7 @@ async function commonBeforeAll() {
   )
 
   // console.log("user ====>", user)
+  testUserId.push(user.id)
 
 await Listing.create(
   {
@@ -71,10 +73,13 @@ await Listing.create(
     minHours: 3
   });
 
+  const listings = await Listing.findAll();
+  // console.log("all listing ==>", listings)
 
+  await Tag.tagListing({listingId:listings[0].id, tagHandle: "pool"})
 
-testUserId.push(user.id)
-
+  const listings1 = await Listing.findAll();
+  console.log("all listing ==>", listings1)
 
 }
 //   await User.applyToJob("u1", testJobIds[0]);

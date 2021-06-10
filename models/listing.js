@@ -184,9 +184,58 @@ class Listing {
     for (let tags of listingTags.rows) {
       listingTagArr.push(tags.tag);
     }
-    
+
     return { ...result.rows[0], tags: listingTagArr };
   }
+
+
+  static async search(titleTerm) {
+    const result = await db.query(
+      `SELECT id,
+              address,
+              unit, 
+              city,
+              state,
+              zip,
+              country,
+              owner_Id AS ownerId,
+              title,
+              description,
+              photo_url AS photoUrl,
+              price_per_hour AS pricePerHour,
+              min_hours AS minHours
+           FROM listings
+           WHERE title ILIKE $1
+           ORDER BY zip`,
+      [`%${titleTerm}%`]);
+
+    if (!result.rows) {
+      throw new NotFoundError;
+    }
+
+    // add an extra value to each listing for tags 
+    //         {...listing, tags:[pool, grill]}
+    const listings = []
+    for (let listing of result.rows) {
+
+      const tagsResult = await db.query(
+        `SELECT t.tag 
+                FROM listings AS l 
+                FULL OUTER JOIN listings_to_tags as t 
+                ON l.id = t.listing_id 
+                WHERE id = $1;`, [listing.id]
+      )
+      const allTags = [];
+      for (let keyVal of tagsResult.rows) {
+        allTags.push(keyVal.tag);
+        listing = { ...listing, tags: allTags }
+      }
+      listings.push(listing);
+    }
+    // 
+    return listings;
+  }
+
 
 
   /** Update listing data with `data`.

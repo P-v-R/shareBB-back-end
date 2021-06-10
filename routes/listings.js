@@ -86,8 +86,15 @@ router.get("/", async function (req, res, next) {
   }
 });
 
-
-
+router.get("/search/:searchTerm", async function (req, res, next) {
+  try {
+    console.log("getting single Listing")
+    const listing = await Listing.search(req.params.searchTerm);
+    return res.json({ listing });
+  } catch (err) {
+    return next(err);
+  }
+});
 
 /** GET single listing  /[listingId] => { Listing }
  * Returns { id,
@@ -135,17 +142,18 @@ router.get("/:id", async function (req, res, next) {
                      photo_url,
                      price_per_hour,
                      min_hours,
-                     tags:[...]}, ...] } */
+                     tags:[...]
+                                 }, ...] } */
 router.get("/tags/:tag", async function (req, res, next) {
   try {
-    console.log("getting all listings with tag")
+
     const listingsAll = await Listing.findAll();
-    const tag = req.params.tag.toLowerCase()
-    console.log("tag=====>", tag)
-    const listings = []
+    const tag = req.params.tag.toLowerCase();
+
+    const listings = [];
     for (let listing of listingsAll) {
       if (listing.tags.includes(tag)) {
-        listings.push(listing)
+        listings.push(listing);
       }
     }
     return res.json({ listings });

@@ -133,32 +133,12 @@ describe("GET /listings", function () {
 
   });
 
-  // test("works: filtering", async function () {
-  //   const resp = await request(app)
-  //       .get(`/jobs`)
-  //       .query({ hasEquity: true });
-  //   expect(resp.body).toEqual({
-  //         jobs: [
-  //           {
-  //             id: expect.any(Number),
-  //             title: "J1",
-  //             salary: 1,
-  //             equity: "0.1",
-  //             companyHandle: "c1",
-  //             companyName: "C1",
-  //           },
-  //           {
-  //             id: expect.any(Number),
-  //             title: "J2",
-  //             salary: 2,
-  //             equity: "0.2",
-  //             companyHandle: "c1",
-  //             companyName: "C1",
-  //           },
-  //         ],
-  //       },
-  //   );
-  // });
+  test("works: get by tag", async function () {
+    const resp = await request(app)
+        .get(`/listings/tags/pool`)
+        console.log("===> resp", resp.body)
+
+  });
 
   //   test("works: filtering on 2 filters", async function () {
   //     const resp = await request(app)
