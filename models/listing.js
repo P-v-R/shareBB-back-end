@@ -2,6 +2,8 @@
 const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
 const { sqlForPartialUpdate } = require("../helpers/sql");
+const { tagFullName } = require("../helpers/fullTag");
+
 /** Related functions for companies. */
 class Listing {
   /** Create a listing (from data), update db, return new listing data.
@@ -137,7 +139,7 @@ class Listing {
       )
       const allTags = [];
       for (let keyVal of tagsResult.rows) {
-        allTags.push(keyVal.tag);
+        allTags.push(tagFullName(keyVal.tag));
         listing = { ...listing, tags: allTags }
       }
       listings.push(listing);
@@ -182,7 +184,7 @@ class Listing {
     const listingTagArr = []; // push each tag to this
 
     for (let tags of listingTags.rows) {
-      listingTagArr.push(tags.tag);
+      listingTagArr.push(tagFullName(tags.tag));
     }
 
     return { ...result.rows[0], tags: listingTagArr };
@@ -227,7 +229,7 @@ class Listing {
       )
       const allTags = [];
       for (let keyVal of tagsResult.rows) {
-        allTags.push(keyVal.tag);
+        allTags.push(tagFullName(keyVal.tag));
         listing = { ...listing, tags: allTags }
       }
       listings.push(listing);
