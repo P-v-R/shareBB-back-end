@@ -10,7 +10,7 @@ const Tag = require("../models/tag");
 
 const listingsNewSchema = require("../schemas/listingsNew.json");
 const listingUpdateSchema = require("../schemas/listingUpdate.json");
-const listingsAddTagSchema= require("../schemas/listingAddTag.json");
+const listingsAddTagSchema = require("../schemas/listingAddTag.json");
 
 const router = express.Router({ mergeParams: true });
 
@@ -46,7 +46,7 @@ const router = express.Router({ mergeParams: true });
  * Authorization required: admin
  */
 
-router.post("/", async function (req, res, next) {  
+router.post("/", async function (req, res, next) {
   const validator = jsonschema.validate(req.body, listingsNewSchema);
   if (!validator.valid) {
     const errs = validator.errors.map(e => e.stack);
@@ -118,7 +118,24 @@ router.get("/:id", async function (req, res, next) {
   }
 });
 
-/** Search listing by tag handle, returns array of listings with matched tah handle */
+/**
+ * GET /tags/... 
+ *  Search listing by tag handle, returns array of listings with matched tag handle
+ * 
+ *  *   { listings: [id,
+ *                   address, 
+                     unit,
+                     city,
+                     state,
+                     zip,
+                     country,
+                     owner_id,
+                     title,
+                     description,
+                     photo_url,
+                     price_per_hour,
+                     min_hours,
+                     tags:[...]}, ...] } */
 router.get("/tags/:tag", async function (req, res, next) {
   try {
     console.log("getting all listings with tag")
@@ -126,8 +143,8 @@ router.get("/tags/:tag", async function (req, res, next) {
     const tag = req.params.tag.toLowerCase()
     console.log("tag=====>", tag)
     const listings = []
-    for (let listing of listingsAll){
-      if(listing.tags.includes(tag)){
+    for (let listing of listingsAll) {
+      if (listing.tags.includes(tag)) {
         listings.push(listing)
       }
     }
@@ -161,7 +178,7 @@ router.get("/tags/:tag", async function (req, res, next) {
  */
 
 router.patch("/:id", async function (req, res, next) {
-  
+
   const validator = jsonschema.validate(req.body, listingUpdateSchema);
   if (!validator.valid) {
     const errs = validator.errors.map(e => e.stack);
@@ -172,24 +189,24 @@ router.patch("/:id", async function (req, res, next) {
 });
 
 
-  /** tag a listing: update db, returns undefined.
-   *
-   * - listingId
-   * - tag
-   **/
+/** tag a listing: update db, returns undefined.
+ *
+ * - listingId
+ * - tag
+ **/
 
-   router.post("/tags", async function (req, res, next) {  
-    const validator = jsonschema.validate(req.body, listingsAddTagSchema);
-    if (!validator.valid) {
-      const errs = validator.errors.map(e => e.stack);
-      throw new BadRequestError(errs);
-    }
-    const tagListing = await Tag.tagListing(req.body);
+router.post("/tags", async function (req, res, next) {
+  const validator = jsonschema.validate(req.body, listingsAddTagSchema);
+  if (!validator.valid) {
+    const errs = validator.errors.map(e => e.stack);
+    throw new BadRequestError(errs);
+  }
+  const tagListing = await Tag.tagListing(req.body);
 
-    return res.status(201).json( tagListing );
-  });
-  
-  
+  return res.status(201).json(tagListing);
+});
+
+
 
 /** DELETE /[listingId]  =>  { deleted: id }
  *
