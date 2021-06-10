@@ -31,14 +31,14 @@ describe("POST /listings", function () {
         "state": "CA" , 
         "zip":"90027" , 
         "country": "USA", 
-        "owner_id": 1, 
+        "ownerId": 1, 
         "title": "GIANT HOUSE ON THE HILL", 
         "description":"Really nice big house" , 
-        "photo_url": "", 
-        "price_per_hour":200 , 
-        "min_hours": 6 
+        "photoIrl": "", 
+        "pricePerHour":200 , 
+        "minHours": 6 
         })
-        console.log("resp ===>", resp.body)
+        // console.log("resp ===>", resp.body)
     expect(resp.statusCode).toEqual(201);
     // expect(resp.body).toEqual({
     //   job: {

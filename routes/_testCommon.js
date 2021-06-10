@@ -2,7 +2,7 @@
 
 const db = require("../db.js");
 const Listing = require("../models/listing");
-const Users = require("../models/users");
+const User = require("../models/user");
 
 // const { createToken } = require("../helpers/tokens");
 
@@ -14,13 +14,14 @@ async function commonBeforeAll() {
   // noinspection SqlWithoutWhere
   await db.query("DELETE FROM listings");
 
-  await Users.post({
-    {
-      firstName: "jimmy",
-      lastName: "Roberts",
-      email: "test@user2s22.com",
+  await User.post({
+    
+      firstName: "test",
+      lastName: "jest",
+      email: "test@user.com",
       passWord: "password",
       bio: "old man who wants to rent a property"
+
     }
   )
 
@@ -32,10 +33,10 @@ await Listing.create(
     state: "Ca",
     zip: "90027",
     country: "USA",
-    owner_id: 1,
+    ownerId: 1,
     title: "house",
     description: "big house",
-    price_per_hour: 50,
+    pricePerHour: 50,
     min_hours: 5
   });
 await Listing.create(
@@ -46,26 +47,13 @@ await Listing.create(
     state: "Ca",
     zip: "90027",
     country: "USA",
-    owner_id: 1,
+    ownerId: 1,
     title: "pool",
     description: "big apartment with pool and backyard",
-    price_per_hour: 150,
-    min_hours: 3
+    pricePerHour: 150,
+    minHours: 3
   });
-await Listing.create(
-  {
-    address: "4055 redwood ave",
-    unit: "132",
-    city: "Los Angeles",
-    state: "Ca",
-    zip: "90038",
-    country: "USA",
-    owner_id: 1,
-    title: "perrys house",
-    description: "perrys old house, very neat! ",
-    price_per_hour: 500,
-    min_hours: 12
-  });
+
 
 let listings = Listing.findAll();
 console.log("setup listings ===>", listings)
