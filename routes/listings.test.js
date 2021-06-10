@@ -19,7 +19,7 @@ afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
 
-// /************************************** POST /jobs */
+// /************************************** POST listings */
 
 
 
@@ -59,126 +59,133 @@ describe("POST /listings", function () {
         "photourl": "",
         "priceperhour": "200",
         "minhours": 6
-
       },
     });
   });
 
-    test("reject new listing if missing info", async function () {
-      let id = await getUserId()
+  test("reject new listing if missing info", async function () {
+    let id = await getUserId()
 
-      const resp = await request(app)
-        .post(`/listings`)
-        .send({
-          "unit": "21",
-          "city": "Los Angeles",
-          "state": "CA",
-          "zip": "90027",
-          "country": "USA",
-          "ownerId": id,
-          "description": "Really nice big house",
-          "photoUrl": "",
-          "pricePerHour": 200,
-          "minHours": 6
-        })
+    const resp = await request(app)
+      .post(`/listings`)
+      .send({
+        "unit": "21",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": "90027",
+        "country": "USA",
+        "ownerId": id,
+        "description": "Really nice big house",
+        "photoUrl": "",
+        "pricePerHour": 200,
+        "minHours": 6
+      })
 
-        console.log("===>", resp.body)
-        expect(resp.statusCode).toEqual(400)
-    }
-  )
+    expect(resp.statusCode).toEqual(400)
+  })
 });
 
 
 
-// /************************************** GET /jobs */
+// /************************************** GET /listings */
 
-// describe("GET /jobs", function () {
-//   test("ok for anon", async function () {
-//     const resp = await request(app).get(`/jobs`);
-//     expect(resp.body).toEqual({
-//           jobs: [
-//             {
-//               id: expect.any(Number),
-//               title: "J1",
-//               salary: 1,
-//               equity: "0.1",
-//               companyHandle: "c1",
-//               companyName: "C1",
-//             },
-//             {
-//               id: expect.any(Number),
-//               title: "J2",
-//               salary: 2,
-//               equity: "0.2",
-//               companyHandle: "c1",
-//               companyName: "C1",
-//             },
-//             {
-//               id: expect.any(Number),
-//               title: "J3",
-//               salary: 3,
-//               equity: null,
-//               companyHandle: "c1",
-//               companyName: "C1",
-//             },
-//           ],
-//         },
-//     );
-//   });
+describe("GET /listings", function () {
+  test("ok", async function () {
+    const resp = await request(app).get(`/listings`);
+    // console.log("listings response ==>", resp.body.listings)
+    expect(resp.body).toEqual({
+      listings: [
+        {
+          id: expect.any(Number),
+          address: '123 test st',
+          unit: '1',
+          city: 'Los Angeles',
+          state: 'Ca',
+          zip: '90027',
+          country: 'USA',
+          ownerid: expect.any(Number),
+          title: 'house',
+          description: 'big house',
+          photourl: null,
+          priceperhour: '50',
+          minhours: 5,
+          tags: [null]
+        },
+        {
+          id: expect.any(Number),
+          address: '345 jest ave',
+          unit: '5a',
+          city: 'Los Angeles',
+          state: 'Ca',
+          zip: '90027',
+          country: 'USA',
+          ownerid: expect.any(Number),
+          title: 'pool',
+          description: 'big apartment with pool and backyard',
+          photourl: null,
+          priceperhour: '150',
+          minhours: 3,
+          tags: [null]
+        }
+      ]
+    }
+    )
 
-//   test("works: filtering", async function () {
-//     const resp = await request(app)
-//         .get(`/jobs`)
-//         .query({ hasEquity: true });
-//     expect(resp.body).toEqual({
-//           jobs: [
-//             {
-//               id: expect.any(Number),
-//               title: "J1",
-//               salary: 1,
-//               equity: "0.1",
-//               companyHandle: "c1",
-//               companyName: "C1",
-//             },
-//             {
-//               id: expect.any(Number),
-//               title: "J2",
-//               salary: 2,
-//               equity: "0.2",
-//               companyHandle: "c1",
-//               companyName: "C1",
-//             },
-//           ],
-//         },
-//     );
-//   });
+  });
 
-//   test("works: filtering on 2 filters", async function () {
-//     const resp = await request(app)
-//         .get(`/jobs`)
-//         .query({ minSalary: 2, title: "3" });
-//     expect(resp.body).toEqual({
-//           jobs: [
-//             {
-//               id: expect.any(Number),
-//               title: "J3",
-//               salary: 3,
-//               equity: null,
-//               companyHandle: "c1",
-//               companyName: "C1",
-//             },
-//           ],
-//         },
-//     );
-//   });
+  // test("works: filtering", async function () {
+  //   const resp = await request(app)
+  //       .get(`/jobs`)
+  //       .query({ hasEquity: true });
+  //   expect(resp.body).toEqual({
+  //         jobs: [
+  //           {
+  //             id: expect.any(Number),
+  //             title: "J1",
+  //             salary: 1,
+  //             equity: "0.1",
+  //             companyHandle: "c1",
+  //             companyName: "C1",
+  //           },
+  //           {
+  //             id: expect.any(Number),
+  //             title: "J2",
+  //             salary: 2,
+  //             equity: "0.2",
+  //             companyHandle: "c1",
+  //             companyName: "C1",
+  //           },
+  //         ],
+  //       },
+  //   );
+  // });
 
-//   test("bad request on invalid filter key", async function () {
-//     const resp = await request(app)
-//         .get(`/jobs`)
-//         .query({ minSalary: 2, nope: "nope" });
-//     expect(resp.statusCode).toEqual(400);
-//   });
-// });
+  //   test("works: filtering on 2 filters", async function () {
+  //     const resp = await request(app)
+  //         .get(`/jobs`)
+  //         .query({ minSalary: 2, title: "3" });
+  //     expect(resp.body).toEqual({
+  //           jobs: [
+  //             {
+  //               id: expect.any(Number),
+  //               title: "J3",
+  //               salary: 3,
+  //               equity: null,
+  //               companyHandle: "c1",
+  //               companyName: "C1",
+  //             },
+  //           ],
+  //         },
+  //     );
+  //   });
+
+  //   test("bad request on invalid filter key", async function () {
+  //     const resp = await request(app)
+  //         .get(`/jobs`)
+  //         .query({ minSalary: 2, nope: "nope" });
+  //     expect(resp.statusCode).toEqual(400);
+  //   });
+});
 
 // /************************************** GET /jobs/:id */
 
