@@ -10,6 +10,7 @@ const Tag = require("../models/tag");
 
 const listingsNewSchema = require("../schemas/listingsNew.json");
 const listingUpdateSchema = require("../schemas/listingUpdate.json");
+const listingsAddTagSchema= require("../schemas/listingAddTag.json");
 
 const router = express.Router({ mergeParams: true });
 
@@ -158,24 +159,17 @@ router.patch("/:id", async function (req, res, next) {
    **/
 
    router.post("/tags", async function (req, res, next) {  
-    // const validator = jsonschema.validate(req.body, listingsNewSchema);
-    // if (!validator.valid) {
-    //   const errs = validator.errors.map(e => e.stack);
-    //   throw new BadRequestError(errs);
-    // }
+    const validator = jsonschema.validate(req.body, listingsAddTagSchema);
+    if (!validator.valid) {
+      const errs = validator.errors.map(e => e.stack);
+      throw new BadRequestError(errs);
+    }
     const tagListing = await Tag.tagListing(req.body);
 
     return res.status(201).json( tagListing );
   });
   
   
-
-
-/** POST /tag 
- *
- */
-
-
 
 /** DELETE /[listingId]  =>  { deleted: id }
  *
