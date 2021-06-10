@@ -30,12 +30,12 @@ class Listing {
     state,
     zip,
     country,
-    owner_id,
+    ownerId,
     title,
     description,
-    photo_url,
-    price_per_hour,
-    min_hours
+    photoUrl,
+    pricePerHour,
+    minHours
   }) {
     const duplicateCheck = await db.query(
       `SELECT title
@@ -43,7 +43,7 @@ class Listing {
            WHERE address = $1`,
       [address]);
     if (duplicateCheck.rows[0])
-      throw new BadRequestError(`Duplicate listing: ${handle}`);
+      throw new BadRequestError(`Duplicate listing`);
     const result = await db.query(
       `INSERT INTO listings
          ( address, 
@@ -81,12 +81,12 @@ class Listing {
         state,
         zip,
         country,
-        owner_id,
+        ownerId,
         title,
         description,
-        photo_url,
-        price_per_hour,
-        min_hours
+        photoUrl,
+        pricePerHour,
+        minHours
       ],
     );
     const listing = result.rows[0];
