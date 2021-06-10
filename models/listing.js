@@ -92,9 +92,12 @@ class Listing {
     const listing = result.rows[0];
     return listing;
   }
+
+
   /** 
    * find all listings in DB
    * 
+   *  
    * 
    *   */
   static async findAll() {
@@ -117,31 +120,33 @@ class Listing {
            `,
     );
     if (!result.rows) {
-      throw new NotFoundError
-      
+      throw new NotFoundError;
     }
 
+    // add an extra value to each listing for tags 
+    //         {...listing, tags:[pool, grill]}
     const listings = []
-    for (let listing of result.rows){
-    
+    for (let listing of result.rows) {
+
       const tagsResult = await db.query(
-              `SELECT t.tag 
+        `SELECT t.tag 
               FROM listings AS l 
               FULL OUTER JOIN listings_to_tags as t 
               ON l.id = t.listing_id 
-              WHERE id = $1;`,[listing.id]
+              WHERE id = $1;`, [listing.id]
       )
-
-      const allTags = []
-      for(let keyVal of tagsResult.rows){
-        allTags.push(keyVal.tag)
-        listing = {...listing, tags:allTags}
+      const allTags = [];
+      for (let keyVal of tagsResult.rows) {
+        allTags.push(keyVal.tag);
+        listing = { ...listing, tags: allTags }
       }
-      listings.push(listing)
+      listings.push(listing);
     }
-
+    // 
     return listings;
   }
+
+  
   /** 
    * find single listing in DB bu the listing ID
    * 
@@ -165,8 +170,26 @@ class Listing {
            WHERE id = $1
            ORDER BY zip`,
       [id]);
-    return result.rows[0];
+
+    // add tags:['...','...'] to end of listing obj
+    const listingTags = await db.query(
+      `SELECT t.tag 
+        FROM listings AS l 
+        FULL OUTER JOIN listings_to_tags as t 
+        ON l.id = t.listing_id 
+        WHERE id = $1;`, [id])
+
+    const listingTagArr = [];
+
+    for (let tags of listingTags.rows) {
+      listingTagArr.push(tags.tag);
+    }
+
+    console.log("LISTING TAGS ==>", { ...result.rows[0], tags: listingTagArr });
+    return { ...result.rows[0], tags: listingTagArr };
   }
+
+
   /** Update listing data with `data`.
    *
    * This is a "partial update" --- it's fine if data doesn't contain all the
@@ -199,15 +222,15 @@ class Listing {
    */
   static async update(id, data) {
     const { setCols, values } = sqlForPartialUpdate(
-        data,
-        {
-          title: "title",
-          description: "description",
-          photo_url: "photo_url",
-          photoUrl: "photo_url",
-          pricePerHour: "price_per_hour",
-          minHours:"min_hours",
-        });
+      data,
+      {
+        title: "title",
+        description: "description",
+        photo_url: "photo_url",
+        photoUrl: "photo_url",
+        pricePerHour: "price_per_hour",
+        minHours: "min_hours",
+      });
     const handleVarIdx = "$" + (values.length + 1);
     console.log("handleVarIdx ====>", handleVarIdx)
     const querySql = `UPDATE listings
