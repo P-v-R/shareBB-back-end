@@ -24,8 +24,11 @@ const tagObj = {  "pool":"Swimming Pool",
                     'studio': 'Music Studio',
                     'patio': 'Patio'}
 
+
 function tagFullName(handle){
   return tagObj[handle]
 }
+
+
 
 module.exports = { tagFullName };
