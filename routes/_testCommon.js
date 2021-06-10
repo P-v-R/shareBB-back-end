@@ -13,7 +13,7 @@ async function commonBeforeAll() {
   // noinspection SqlWithoutWhere
   await db.query("DELETE FROM listings");
 
-  // await Listing.create(
+  await Listing.create(
   //   {
   //     address: "123 test st",
   //     unit: "1",
