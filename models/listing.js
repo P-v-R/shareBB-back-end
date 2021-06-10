@@ -146,7 +146,7 @@ class Listing {
     return listings;
   }
 
-  
+
   /** 
    * find single listing in DB bu the listing ID
    * 
@@ -179,13 +179,12 @@ class Listing {
         ON l.id = t.listing_id 
         WHERE id = $1;`, [id])
 
-    const listingTagArr = [];
+    const listingTagArr = []; // push each tag to this
 
     for (let tags of listingTags.rows) {
       listingTagArr.push(tags.tag);
     }
-
-    console.log("LISTING TAGS ==>", { ...result.rows[0], tags: listingTagArr });
+    
     return { ...result.rows[0], tags: listingTagArr };
   }
 
