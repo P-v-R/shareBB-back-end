@@ -10,6 +10,7 @@ const {
   commonBeforeEach,
   commonAfterEach,
   commonAfterAll,
+  getUserId
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -17,77 +18,77 @@ beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
+
 // /************************************** POST /jobs */
 
+
+
 describe("POST /listings", function () {
-  test("ok for admin", async function () {
+  test("ok for add new user", async function () {
+    let id = await getUserId()
 
     const resp = await request(app)
-        .post(`/listings`)
-        .send({
-        "address":"200 stinker ave" , 
-        "unit": "21" , 
-        "city": "Los Angeles" , 
-        "state": "CA" , 
-        "zip":"90027" , 
-        "country": "USA", 
-        "ownerId": 1, 
-        "title": "GIANT HOUSE ON THE HILL", 
-        "description":"Really nice big house" , 
-        "photoIrl": "", 
-        "pricePerHour":200 , 
-        "minHours": 6 
-        })
-        // console.log("resp ===>", resp.body)
+      .post(`/listings`)
+      .send({
+        "address": "200 stinker ave",
+        "unit": "21",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": "90027",
+        "country": "USA",
+        "ownerId": id,
+        "title": "GIANT HOUSE ON THE HILL",
+        "description": "Really nice big house",
+        "photoUrl": "",
+        "pricePerHour": 200,
+        "minHours": 6
+      })
     expect(resp.statusCode).toEqual(201);
-    // expect(resp.body).toEqual({
-    //   job: {
-    //     id: expect.any(Number),
-    //     title: "J-new",
-    //     salary: 10,
-    //     equity: "0.2",
-    //     companyHandle: "c1",
-    //   },
-    // });
+    expect(resp.body).toEqual({
+      listing: {
+        id: expect.any(Number),
+        "address": "200 stinker ave",
+        "unit": "21",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": "90027",
+        "country": "USA",
+        "ownerid": id,
+        "title": "GIANT HOUSE ON THE HILL",
+        "description": "Really nice big house",
+        "photourl": "",
+        "priceperhour": "200",
+        "minhours": 6
+
+      },
+    });
   });
 
-//   test("unauth for users", async function () {
-//     const resp = await request(app)
-//         .post(`/jobs`)
-//         .send({
-//           companyHandle: "c1",
-//           title: "J-new",
-//           salary: 10,
-//           equity: "0.2",
-//         })
-//         .set("authorization", `Bearer ${u1Token}`);
-//     expect(resp.statusCode).toEqual(401);
-//   });
+    test("reject new listing if missing info", async function () {
+      let id = await getUserId()
 
-//   test("bad request with missing data", async function () {
-//     const resp = await request(app)
-//         .post(`/jobs`)
-//         .send({
-//           companyHandle: "c1",
-//         })
-//         .set("authorization", `Bearer ${adminToken}`);
-//     expect(resp.statusCode).toEqual(400);
-//   });
+      const resp = await request(app)
+        .post(`/listings`)
+        .send({
+          "unit": "21",
+          "city": "Los Angeles",
+          "state": "CA",
+          "zip": "90027",
+          "country": "USA",
+          "ownerId": id,
+          "description": "Really nice big house",
+          "photoUrl": "",
+          "pricePerHour": 200,
+          "minHours": 6
+        })
 
-//   test("bad request with invalid data", async function () {
-//     const resp = await request(app)
-//         .post(`/jobs`)
-//         .send({
-//           companyHandle: "c1",
-//           title: "J-new",
-//           salary: "not-a-number",
-//           equity: "0.2",
-//         })
-//         .set("authorization", `Bearer ${adminToken}`);
-//     expect(resp.statusCode).toEqual(400);
-//   });
-
+        console.log("===>", resp.body)
+        expect(resp.statusCode).toEqual(400)
+    }
+  )
 });
+
+
 
 // /************************************** GET /jobs */
 

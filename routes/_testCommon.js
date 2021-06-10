@@ -4,26 +4,43 @@ const db = require("../db.js");
 const Listing = require("../models/listing");
 const User = require("../models/user");
 
-// const { createToken } = require("../helpers/tokens");
+//generate user id thats in test DB
 
-const testListingIds = [];
+async function getUserId(){
+  const user = await User.register({
+    
+    firstName: "test",
+    lastName: "jest",
+    email: "test1@user.com",
+    password: "password",
+    bio: "old man who wants to rent a property"
+  }
+)
+return user.id
+}
+
+
+
 async function commonBeforeAll() {
-  console.log("TEST LISTING ID ==>", testListingIds)
+  const testUserId = [];
+  // console.log("TEST LISTING ID ==>", testListingIds)
   // noinspection SqlWithoutWhere
-  await db.query("DELETE FROM users");
-  // noinspection SqlWithoutWhere
-  await db.query("DELETE FROM listings");
+  // // noinspection SqlWithoutWhere
+  await db.query("DELETE FROM listings ");
+  await db.query("DELETE FROM users ");
 
-  await User.post({
+
+  const user = await User.register({
     
       firstName: "test",
       lastName: "jest",
       email: "test@user.com",
-      passWord: "password",
+      password: "password",
       bio: "old man who wants to rent a property"
-
     }
   )
+
+  // console.log("user ====>", user)
 
 await Listing.create(
   {
@@ -33,11 +50,11 @@ await Listing.create(
     state: "Ca",
     zip: "90027",
     country: "USA",
-    ownerId: 1,
+    ownerId: user.id,
     title: "house",
     description: "big house",
     pricePerHour: 50,
-    min_hours: 5
+    minHours: 5
   });
 await Listing.create(
   {
@@ -47,7 +64,7 @@ await Listing.create(
     state: "Ca",
     zip: "90027",
     country: "USA",
-    ownerId: 1,
+    ownerId: user.id,
     title: "pool",
     description: "big apartment with pool and backyard",
     pricePerHour: 150,
@@ -55,8 +72,8 @@ await Listing.create(
   });
 
 
-let listings = Listing.findAll();
-console.log("setup listings ===>", listings)
+
+testUserId.push(user.id)
 
 
 }
@@ -84,5 +101,6 @@ module.exports = {
   commonBeforeAll,
   commonBeforeEach,
   commonAfterEach,
-  commonAfterAll
+  commonAfterAll,
+  getUserId
 };
