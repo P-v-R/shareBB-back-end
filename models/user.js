@@ -248,6 +248,7 @@ class User {
 
   static async bookListing(userId, data) {
     const { listingId, startDate, startHour, numHours, totalPrice } = data;
+    //TODO add validatoin
     const preCheck = await db.query(
       `SELECT id
            FROM listings

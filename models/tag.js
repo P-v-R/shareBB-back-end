@@ -157,7 +157,8 @@ return result.rows;
    * - tag
    **/
 
-  static async tagListing(listingId, tagHandle) {
+  static async tagListing({listingId, tagHandle}) {
+    console.log("listing id ===>", listingId)
     const preCheck = await db.query(
       `SELECT id
            FROM listings
@@ -173,11 +174,15 @@ return result.rows;
     const tag = preCheck2.rows[0];
 
     if (!tag) throw new NotFoundError(`No tag: ${tagHandle}`);
+    console.log("from models ===>", listingId, tagHandle)
 
-    await db.query(
-      `INSERT INTO tags_to_listings (listings_id, tag)
-           VALUES ($1, $2)`,
+    const result = await db.query(
+      `INSERT INTO listings_to_tags (listing_id, tag)
+           VALUES ($1, $2)
+           RETURNING listing_id, tag`,
       [listingId, tagHandle]);
+
+      return result.rows
   }
 }
 

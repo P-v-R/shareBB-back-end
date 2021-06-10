@@ -33,6 +33,7 @@ INSERT INTO listings (address,
                         price_per_hour,
                         min_hours
                         )
+                        
 VALUES ('123 test st', 'A', 'Los Angeles', 'CA', '90064', 'USA', 1, 'mo test listing', 'this is my listing description',
         '1.jpg', 50.50 , 2),
         ('1111 test ave', '2B', 'Los Angeles', 'CA', '90010', 'USA', 2, 'perry test listing', 'this is my listing description',
@@ -68,6 +69,7 @@ VALUES ('pool', 'Swimming Pool'),
        ('garden', 'Garden'),
        ('studio', 'Music Studio'),
        ('patio', 'Patio');
+
 
 INSERT INTO listings_to_tags (listing_id, tag)
 VALUES (1, 'pool'),

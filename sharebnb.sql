@@ -1,6 +1,6 @@
 \echo 'Delete and recreate sharebnb db?'
 \prompt 'Return for yes or control-C to cancel > ' foo
-
+DROP DATABASE sharebnb_test;
 DROP DATABASE sharebnb;
 CREATE DATABASE sharebnb;
 \connect sharebnb

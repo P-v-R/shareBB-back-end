@@ -5,6 +5,7 @@ const express = require("express");
 const { BadRequestError } = require("../expressError");
 const { ensureAdmin } = require("../middleware/auth");
 const Listing = require("../models/Listing");
+const Tag = require("../models/tag");
 
 
 const listingsNewSchema = require("../schemas/listingsNew.json");
@@ -148,6 +149,31 @@ router.patch("/:id", async function (req, res, next) {
   const listing = await Listing.update(req.params.id, req.body);
   return res.json({ listing });
 });
+
+
+  /** tag a listing: update db, returns undefined.
+   *
+   * - listingId
+   * - tag
+   **/
+
+   router.post("/tags", async function (req, res, next) {  
+    // const validator = jsonschema.validate(req.body, listingsNewSchema);
+    // if (!validator.valid) {
+    //   const errs = validator.errors.map(e => e.stack);
+    //   throw new BadRequestError(errs);
+    // }
+    const tagListing = await Tag.tagListing(req.body);
+
+    return res.status(201).json( tagListing[0] );
+  });
+  
+  
+
+
+/** POST /tag 
+ *
+ */
 
 
 
