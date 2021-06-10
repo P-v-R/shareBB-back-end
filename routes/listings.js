@@ -165,7 +165,7 @@ router.patch("/:id", async function (req, res, next) {
     // }
     const tagListing = await Tag.tagListing(req.body);
 
-    return res.status(201).json( tagListing[0] );
+    return res.status(201).json( tagListing );
   });
   
   

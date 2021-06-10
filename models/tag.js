@@ -182,7 +182,7 @@ return result.rows;
            RETURNING listing_id, tag`,
       [listingId, tagHandle]);
 
-      return result.rows
+      return result.rows[0]
   }
 }
 
