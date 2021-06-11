@@ -3,7 +3,7 @@
 const jsonschema = require("jsonschema");
 const express = require("express");
 const { BadRequestError } = require("../expressError");
-const { ensureAdmin } = require("../middleware/auth");
+const { tagFullName } = require("../helpers/fullTag");
 const Listing = require("../models/Listing");
 const Tag = require("../models/tag");
 
@@ -86,6 +86,11 @@ router.get("/", async function (req, res, next) {
   }
 });
 
+/**GET /title/:search - search by title
+ *  will return any listing obj with like title to search
+ * 
+ * 
+ *  / */
 router.get("/search/:searchTerm", async function (req, res, next) {
   try {
     console.log("getting single Listing")
@@ -125,10 +130,13 @@ router.get("/:id", async function (req, res, next) {
   }
 });
 
-/**
- * GET /tags/... 
+
+
+ /**
+//  * GET /tags/... 
  *  Search listing by tag handle, returns array of listings with matched tag handle
- * 
+ *    
+ * Returns===>
  *  *   { listings: [id,
  *                   address, 
                      unit,
@@ -152,7 +160,9 @@ router.get("/tags/:tag", async function (req, res, next) {
 
     const listings = [];
     for (let listing of listingsAll) {
-      if (listing.tags.includes(tag)) {
+      console.log("listing and tag ==>", tag, tag)
+      
+      if (listing.tags.includes(tagFullName(tag))) {
         listings.push(listing);
       }
     }

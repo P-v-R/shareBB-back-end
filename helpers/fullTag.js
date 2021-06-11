@@ -1,17 +1,5 @@
-
-
-('pool', 'Swimming Pool'),
-       ('tub', 'Hot Tub'),
-       ('sauna', 'Sauna'),
-       ('grill', 'BBQ/Grill'),
-       ('yard', 'Yard'),
-       ('firepit', 'Fire Pit'),
-       ('gym', 'Gym/Workout'),
-       ('trampoline', 'Trampoline'),
-       ('garden', 'Garden'),
-       ('studio', 'Music Studio'),
-       ('patio', 'Patio');
-
+// instead of joining 3 tables to get the full tag name for each listings tags, 
+// simple input tag handle and tagFullName will return its full name
 const tagObj = {  "pool":"Swimming Pool",
                    "tub":'Hot Tub',
                    'sauna':'Sauna', 
@@ -26,8 +14,10 @@ const tagObj = {  "pool":"Swimming Pool",
 
 
 function tagFullName(handle){
-  return tagObj[handle]
+  return tagObj[handle];
 }
+
+
 
 
 
