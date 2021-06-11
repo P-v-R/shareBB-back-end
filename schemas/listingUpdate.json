@@ -10,7 +10,7 @@
       "type": "string"
     },
     "photoUrl": {
-      "type": "string"
+      "type": "integer"
     },
     "price_per_hour": {
       "type": "integer"
