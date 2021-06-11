@@ -9,7 +9,7 @@
     "description": {
       "type": "string"
     },
-    "photo_url": {
+    "photoUrl": {
       "type": "string"
     },
     "price_per_hour": {

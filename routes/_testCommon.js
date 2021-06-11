@@ -73,13 +73,10 @@ await Listing.create(
     minHours: 3
   });
 
-  const listings = await Listing.findAll();
-  // console.log("all listing ==>", listings)
 
-  await Tag.tagListing({listingId:listings[0].id, tagHandle: "pool"})
+  
 
-  const listings1 = await Listing.findAll();
-  console.log("all listing ==>", listings1)
+
 
 }
 //   await User.applyToJob("u1", testJobIds[0]);

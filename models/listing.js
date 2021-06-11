@@ -276,7 +276,7 @@ class Listing {
       {
         title: "title",
         description: "description",
-        photo_url: "photo_url",
+     
         photoUrl: "photo_url",
         pricePerHour: "price_per_hour",
         minHours: "min_hours",
